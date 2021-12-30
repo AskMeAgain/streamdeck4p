@@ -8,6 +8,7 @@ authors = ["AskMeAgain <20632124+AskMeAgain@users.noreply.github.com>"]
 python = "^3.9"
 streamdeck = "^0.8.5"
 Pillow = "^8.4.0"
+psutil = "^5.9.0"
 
 [tool.poetry.dev-dependencies]
 

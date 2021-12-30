@@ -1,13 +1,32 @@
 {
-	"DL38K1A00645": {
-		"0": {
-			"command": "echo $_state_1_$",
-			"image_url": "/home/dev/streamdeck/intellij.png"
-		},
-		"1": {
-			"toggle_index": 0,
-			"internal_state": [ "db", "chrome", "intellij", "postman"],
-			"image_url": "/home/dev/streamdeck/$_state_1_$.png"
-		}
-	}
+  "DL38K1A00645": {
+    "current_page": "0",
+    "0": {
+      "0": {
+        "command": "echo $_state_1_$",
+        "image_url": "/home/dev/streamdeck/intellij.png"
+      },
+      "1": {
+        "toggle_index": 1,
+        "internal_state": [
+          "db",
+          "chrome",
+          "intellij",
+          "postman"
+        ],
+        "image_url": "/home/dev/streamdeck/$_state_1_$.png"
+      },
+      "2": {
+        "next_page": "1",
+        "image_url": "/home/dev/streamdeck/postman.png"
+      }
+    },
+    "1": {
+      "2": {
+        "next_page": "0",
+        "image_url": "/home/dev/streamdeck/db.png"
+      }
+    }
+  },
+  "pid": 12051
 }
