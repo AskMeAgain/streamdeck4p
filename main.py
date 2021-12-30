@@ -6,6 +6,9 @@ import json
 import subprocess
 from signal import signal, SIGUSR1
 
+import pynput
+from pynput import keyboard
+
 from pathlib import Path
 from typing import Dict
 
@@ -33,6 +36,7 @@ def replace_with_state(deck_id: str, page: str, line: str) -> str:
 def execute_command(deck_id: str, page: str, command: str) -> bool:
     fixed_command = replace_with_state(deck_id, page, command)
     print(f"Executing command: {fixed_command}")
+    subprocess.run(fixed_command.split(" "))
     return True
 
 
@@ -47,12 +51,20 @@ def save_file():
         f.write(json.dumps(state, indent=2))
 
 
+def press_keys(keys: str):
+    for frame in keys.split(","):
+        #TODO
+        pynput.keyboard.(keys.spl)
+
+
 def button_activated(deck_id: str, page: str, key: str):
     command_worked = True
     if "command" in state[deck_id][page][key]:
         command_worked = execute_command(deck_id, page, state[deck_id][page][key]["command"])
     if command_worked:
         toggle(deck_id, page, key)
+    if "keys" in state[deck_id][page][key]:
+        press_keys(state[deck_id][page][key]["keys"])
     if "next_page" in state[deck_id][page][key]:
         state[deck_id]["current_page"] = state[deck_id][page][key]["next_page"]
     save_file()

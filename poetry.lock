@@ -1,4 +1,12 @@
 [[package]]
+name = "evdev"
+version = "1.4.0"
+description = "Bindings to the Linux input handling subsystem"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "pillow"
 version = "8.4.0"
 description = "Python Imaging Library (Fork)"
@@ -18,6 +26,84 @@ python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 test = ["ipaddress", "mock", "unittest2", "enum34", "pywin32", "wmi"]
 
 [[package]]
+name = "pynput"
+version = "1.7.5"
+description = "Monitor and control user input devices"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+evdev = {version = ">=1.3", markers = "sys_platform in \"linux\""}
+pyobjc-framework-ApplicationServices = {version = ">=8.0", markers = "sys_platform == \"darwin\""}
+pyobjc-framework-Quartz = {version = ">=8.0", markers = "sys_platform == \"darwin\""}
+python-xlib = {version = ">=0.17", markers = "sys_platform in \"linux\""}
+six = "*"
+
+[[package]]
+name = "pyobjc-core"
+version = "8.1"
+description = "Python<->ObjC Interoperability Module"
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[[package]]
+name = "pyobjc-framework-applicationservices"
+version = "8.1"
+description = "Wrappers for the framework ApplicationServices on macOS"
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[package.dependencies]
+pyobjc-core = ">=8.1"
+pyobjc-framework-Cocoa = ">=8.1"
+pyobjc-framework-Quartz = ">=8.1"
+
+[[package]]
+name = "pyobjc-framework-cocoa"
+version = "8.1"
+description = "Wrappers for the Cocoa frameworks on macOS"
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[package.dependencies]
+pyobjc-core = ">=8.1"
+
+[[package]]
+name = "pyobjc-framework-quartz"
+version = "8.1"
+description = "Wrappers for the Quartz frameworks on macOS"
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[package.dependencies]
+pyobjc-core = ">=8.1"
+pyobjc-framework-Cocoa = ">=8.1"
+
+[[package]]
+name = "python-xlib"
+version = "0.31"
+description = "Python X Library"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+six = ">=1.10.0"
+
+[[package]]
+name = "six"
+version = "1.16.0"
+description = "Python 2 and 3 compatibility utilities"
+category = "main"
+optional = false
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*"
+
+[[package]]
 name = "streamdeck"
 version = "0.8.5"
 description = "Library to control Elgato StreamDeck devices."
@@ -28,9 +114,12 @@ python-versions = ">=3.8"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "c5aeb868256bd5e011b046e851f9b0a20b422793162a6eef867010cf9d61edda"
+content-hash = "fa9e7bae2feec7b4dcff505d4e714b3eb6d66bee50a16bec253c4d9609c67e50"
 
 [metadata.files]
+evdev = [
+    {file = "evdev-1.4.0.tar.gz", hash = "sha256:8782740eb1a86b187334c07feb5127d3faa0b236e113206dfe3ae8f77fb1aaf1"},
+]
 pillow = [
     {file = "Pillow-8.4.0-cp310-cp310-macosx_10_10_universal2.whl", hash = "sha256:81f8d5c81e483a9442d72d182e1fb6dcb9723f289a57e8030811bac9ea3fef8d"},
     {file = "Pillow-8.4.0-cp310-cp310-macosx_11_0_arm64.whl", hash = "sha256:3f97cfb1e5a392d75dd8b9fd274d205404729923840ca94ca45a0af57e13dbe6"},
@@ -102,6 +191,51 @@ psutil = [
     {file = "psutil-5.9.0-cp39-cp39-win32.whl", hash = "sha256:4e2fb92e3aeae3ec3b7b66c528981fd327fb93fd906a77215200404444ec1845"},
     {file = "psutil-5.9.0-cp39-cp39-win_amd64.whl", hash = "sha256:7d190ee2eaef7831163f254dc58f6d2e2a22e27382b936aab51c835fc080c3d3"},
     {file = "psutil-5.9.0.tar.gz", hash = "sha256:869842dbd66bb80c3217158e629d6fceaecc3a3166d3d1faee515b05dd26ca25"},
+]
+pynput = [
+    {file = "pynput-1.7.5-py2.py3-none-any.whl", hash = "sha256:9c0b6bfd3462ac0234248f3b5a9809a66314e7da0fc3f799c8f29db4a17300dc"},
+    {file = "pynput-1.7.5-py3.9.egg", hash = "sha256:235efd7a58ef7d3aab498aa0da998097bdd0ccae5777b2d23d307e32b67b3609"},
+    {file = "pynput-1.7.5.tar.gz", hash = "sha256:e6b7926dd162a883ff16f38e01720a930bbf2509146c9f1cdcecddd25288fb6e"},
+]
+pyobjc-core = [
+    {file = "pyobjc-core-8.1.tar.gz", hash = "sha256:920914a1a4cd4f8a54babe93f0b4e4cd93b51d11ae38d8ef17f5edb603b7a949"},
+    {file = "pyobjc_core-8.1-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:ddd9b964df292fa0bbd0d0694befe4c524977780e3f11221ac7e8683d5e9590f"},
+    {file = "pyobjc_core-8.1-cp37-cp37m-macosx_10_9_x86_64.whl", hash = "sha256:b6662805d288cd1bfd257565ddc07541d0162b3167af15e39f7a654b94f6667b"},
+    {file = "pyobjc_core-8.1-cp38-cp38-macosx_10_9_x86_64.whl", hash = "sha256:43f251881fe36dcb9ca9f7946ab13ddb4aa2499bde3c8bf2dc8144b5fe884629"},
+    {file = "pyobjc_core-8.1-cp38-cp38-macosx_11_0_universal2.whl", hash = "sha256:781cfa7a3f72ce7213b4c341b5c552cd63b6664b3b444a23fcb1d5fdd417aa8b"},
+    {file = "pyobjc_core-8.1-cp39-cp39-macosx_10_9_universal2.whl", hash = "sha256:951e716ad30bea52190f5e82604ee2c7f3dc6c04722cf0a3311ad7e4e6af5134"},
+]
+pyobjc-framework-applicationservices = [
+    {file = "pyobjc-framework-ApplicationServices-8.1.tar.gz", hash = "sha256:01b8378cd27bbc2bad449600a5ff05060cd4f2098eb6b7bc85f0f95baad721b6"},
+    {file = "pyobjc_framework_ApplicationServices-8.1-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:7e34d4b4f034e7500bcb11f1290d4d99f737dfb8057a73a0a7b6090d48886543"},
+    {file = "pyobjc_framework_ApplicationServices-8.1-cp37-cp37m-macosx_10_9_x86_64.whl", hash = "sha256:c35da5ab2851fff21950c73a1abb19f9e925f75190bb03404b12b1a0c959a013"},
+    {file = "pyobjc_framework_ApplicationServices-8.1-cp38-cp38-macosx_10_9_x86_64.whl", hash = "sha256:d608b400e8a41a0aeef08e59af66c1aeb626d2a09ae33c66ebf24f69773c08c9"},
+    {file = "pyobjc_framework_ApplicationServices-8.1-cp38-cp38-macosx_11_0_universal2.whl", hash = "sha256:4d31fde8409f4b705fa152ef68f2e7577013e6e1d79c2e659346941942b6ed39"},
+    {file = "pyobjc_framework_ApplicationServices-8.1-cp39-cp39-macosx_10_9_universal2.whl", hash = "sha256:3eb1f24f5b3c03a8adf7339f4d70677a8c3223914e802fa4736009cc29f8920b"},
+]
+pyobjc-framework-cocoa = [
+    {file = "pyobjc-framework-Cocoa-8.1.tar.gz", hash = "sha256:9de42dc3e0911d6e30cf41bb4baf9aaf2723a27053f7edbd8ad7d758cf41b81d"},
+    {file = "pyobjc_framework_Cocoa-8.1-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:b588a3ed9adcdbfafcbfa77bbd72844afb8d987a70cce7a4f3a35a9474271a11"},
+    {file = "pyobjc_framework_Cocoa-8.1-cp37-cp37m-macosx_10_9_x86_64.whl", hash = "sha256:626f6d084a537b365c0786674036643695e7829ebaf7889aa9b327f3b897a800"},
+    {file = "pyobjc_framework_Cocoa-8.1-cp38-cp38-macosx_10_9_x86_64.whl", hash = "sha256:8075f6cf8cac804d9ed05355c68a8a0cd3ce31a310469279c6c7e49dad47b010"},
+    {file = "pyobjc_framework_Cocoa-8.1-cp38-cp38-macosx_11_0_universal2.whl", hash = "sha256:9e47a2709b8458422752efccaa89f4b52cc8e01345ec71c43c713a891f084bb6"},
+    {file = "pyobjc_framework_Cocoa-8.1-cp39-cp39-macosx_10_9_universal2.whl", hash = "sha256:0b0aee74f6c32103338e3735f308052f4cc534c25762130303638aaa6d62d851"},
+]
+pyobjc-framework-quartz = [
+    {file = "pyobjc-framework-Quartz-8.1.tar.gz", hash = "sha256:4994d9d99e74384f24031084a7b7711082e9dd46253399c8fdec4746c4a2a11b"},
+    {file = "pyobjc_framework_Quartz-8.1-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:e310dc0cee4796c5b249a07229bc04f796d586e182ee520a963fe6e93efcbfe8"},
+    {file = "pyobjc_framework_Quartz-8.1-cp37-cp37m-macosx_10_9_x86_64.whl", hash = "sha256:0464eca74eda6623db37c41edeb1d01327988f9b1cfbcb28a94c37e117c5cf93"},
+    {file = "pyobjc_framework_Quartz-8.1-cp38-cp38-macosx_10_9_x86_64.whl", hash = "sha256:656e692fe7ba3e411f86aabed790af80a4f967b676d1bc10de21432ba3626eb0"},
+    {file = "pyobjc_framework_Quartz-8.1-cp38-cp38-macosx_11_0_universal2.whl", hash = "sha256:1598578fdf8841a86957710b2c6c1832e35778f5a7a4359c924cd6b2562aab8a"},
+    {file = "pyobjc_framework_Quartz-8.1-cp39-cp39-macosx_10_9_universal2.whl", hash = "sha256:e1e36960ff7cb6df68450fcee82d06cf3bd7add9a58b7cb006f8103d4b86e8e8"},
+]
+python-xlib = [
+    {file = "python-xlib-0.31.tar.gz", hash = "sha256:74d83a081f532bc07f6d7afcd6416ec38403d68f68b9b9dc9e1f28fbf2d799e9"},
+    {file = "python_xlib-0.31-py2.py3-none-any.whl", hash = "sha256:1ec6ce0de73d9e6592ead666779a5732b384e5b8fb1f1886bd0a81cafa477759"},
+]
+six = [
+    {file = "six-1.16.0-py2.py3-none-any.whl", hash = "sha256:8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254"},
+    {file = "six-1.16.0.tar.gz", hash = "sha256:1e61c37477a1626458e36f7b1d82aa5c9b094fa4802892072e49de9c60c4c926"},
 ]
 streamdeck = [
     {file = "streamdeck-0.8.5-py3-none-any.whl", hash = "sha256:d3f144f0fd6e4e24f5bbe973f2e9dcce383560a1cf437b4fc2a859559e1e959b"},

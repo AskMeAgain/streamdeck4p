@@ -9,6 +9,7 @@ python = "^3.9"
 streamdeck = "^0.8.5"
 Pillow = "^8.4.0"
 psutil = "^5.9.0"
+pynput = "^1.7.5"
 
 [tool.poetry.dev-dependencies]
 
