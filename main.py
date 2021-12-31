@@ -1,13 +1,15 @@
+import glob
 import os
 import sys
 import threading
 import re
 import json
 import subprocess
-from signal import signal, SIGUSR1
+from signal import signal, SIGUSR1, SIGTERM
+from time import sleep
 
 import pynput
-from pynput import keyboard
+from pynput.keyboard import Key, Controller, KeyCode
 
 from pathlib import Path
 from typing import Dict
@@ -18,23 +20,29 @@ from StreamDeck.DeviceManager import DeviceManager
 from StreamDeck.Devices import StreamDeck
 from StreamDeck.ImageHelpers import PILHelper
 
+import utils
 
 state: Dict[str, Dict[str, Dict[str, Dict[str, str]]]] = {}
 decks: StreamDeck = []
+key_board: Controller
 
 
-def replace_with_state(deck_id: str, page: str, line: str) -> str:
+def replace_with_state(deck_id: str, page: str, line: str, comma_separated: bool) -> str:
     groups = re.search("\\$_state_(.*)_\\$", line)
     if not groups:
         return line
     new_key = groups.group(1)
     resolved_btn = state[deck_id][page][new_key]
     resolved_state = resolved_btn["internal_state"][resolved_btn["toggle_index"]]
+
+    if comma_separated:
+        resolved_state = ",".join(resolved_state)
+
     return line.replace(f"$_state_{new_key}_$", resolved_state)
 
 
 def execute_command(deck_id: str, page: str, command: str) -> bool:
-    fixed_command = replace_with_state(deck_id, page, command)
+    fixed_command = replace_with_state(deck_id, page, command, False)
     print(f"Executing command: {fixed_command}")
     subprocess.run(fixed_command.split(" "))
     return True
@@ -47,14 +55,18 @@ def toggle(deck_id: str, page: str, key: str):
 
 
 def save_file():
-    with open('.streamdeck4p.json', 'w') as f:
+    with open(os.path.join(Path.home(), 'streamdeck/streamdeck4p.json'), 'w') as f:
         f.write(json.dumps(state, indent=2))
 
 
-def press_keys(keys: str):
-    for frame in keys.split(","):
-        #TODO
-        pynput.keyboard.(keys.spl)
+def press_keys(deck_id: str, page: str, keys: str):
+    replaced_keys = replace_with_state(deck_id, page, keys, True)
+    for frame_key in replaced_keys.split(","):
+        for key in pynput.keyboard.HotKey.parse(frame_key):
+            keyboard.press(key)
+        sleep(0.01)
+        for key in pynput.keyboard.HotKey.parse(frame_key):
+            keyboard.release(key)
 
 
 def button_activated(deck_id: str, page: str, key: str):
@@ -64,7 +76,7 @@ def button_activated(deck_id: str, page: str, key: str):
     if command_worked:
         toggle(deck_id, page, key)
     if "keys" in state[deck_id][page][key]:
-        press_keys(state[deck_id][page][key]["keys"])
+        press_keys(deck_id, page, state[deck_id][page][key]["keys"])
     if "next_page" in state[deck_id][page][key]:
         state[deck_id]["current_page"] = state[deck_id][page][key]["next_page"]
     save_file()
@@ -83,18 +95,17 @@ def key_change_callback(deck, key, button_pressed):
 
 def load_state(insert_pid: bool):
     global state
-    txt = Path('.streamdeck4p.json').read_text()
+    txt = Path(os.path.join(Path.home(), 'streamdeck/streamdeck4p.json')).read_text()
     state = json.loads(txt)
+
+    json_files = glob.glob(os.path.join(Path.home() , 'streamdeck/streamdeck4p-*.json'))
+    for path in json_files:
+        txt2 = Path(path).read_text()
+        state = utils.update_dict(state, json.loads(txt2))
 
     if insert_pid:
         state["pid"] = os.getpid()
         save_file()
-
-
-def generate_image(deck, icon_filename) -> Image:
-    icon = Image.open(icon_filename)
-    image = PILHelper.create_scaled_image(deck, icon, margins=[5, 5, 5, 5])
-    return PILHelper.to_native_format(deck, image)
 
 
 def render_gui(a, b):
@@ -107,8 +118,12 @@ def render_gui(a, b):
 
             if page in deck_state and str(key) in deck_state[page] and "image_url" in deck_state[page][str(key)]:
                 img_url = deck_state[page][str(key)]["image_url"]
-                replaced_img = replace_with_state(deck_id, page, img_url)
-                image = generate_image(deck, replaced_img)
+                replaced_img = replace_with_state(deck_id, page, img_url, False)
+                text = ""
+                if "text" in deck_state[page][str(key)]:
+                    text = deck_state[page][str(key)]["text"]
+                replaced_text = replace_with_state(deck_id, page, text, False)
+                image = utils.generate_image(deck, replaced_img, replaced_text)
                 with deck:
                     deck.set_key_image(key, image)
             else:
@@ -141,6 +156,7 @@ if __name__ == '__main__':
     if not cli_switches():
         streamdecks = DeviceManager().enumerate()
 
+        keyboard = Controller()
         decks = list()
         load_state(True)
 
