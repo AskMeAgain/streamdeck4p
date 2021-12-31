@@ -37,16 +37,21 @@ def update_dict(original, update):
     return original
 
 
-def generate_image(deck, icon_filename, text: str) -> Image:
+def generate_image(deck, icon_filename, text: str, image_mode: str) -> Image:
     icon = Image.open(icon_filename)
-    bottom_margin = 5
-    if text:
-        bottom_margin = 20
-    image = PILHelper.create_scaled_image(deck, icon, margins=[5, 5, bottom_margin, 5])
-    # Load a custom TrueType font and use it to overlay the key index, draw key
-    # label onto the image a few pixels from the bottom of the key.
+    normal_margin = 5
+    if image_mode == "full":
+        normal_margin = 0
+    bottom_margin = normal_margin
+    if text and image_mode != "full":
+        bottom_margin += 15
+    image = PILHelper.create_scaled_image(deck, icon, margins=[normal_margin,normal_margin, bottom_margin, normal_margin])
+    text_height = image.height - 5
+    if image_mode == "full":
+        text_height = image.height / 2 + 5
+
     draw = ImageDraw.Draw(image)
-    font = ImageFont.truetype("./fonts/roboto/Roboto-Regular.ttf", 14)
-    draw.text((image.width / 2, image.height - 5), text=text, font=font, anchor="ms", fill="white")
+    font = ImageFont.truetype("./fonts/Roboto-Regular.ttf", 14)
+    draw.text((image.width / 2, text_height), text=text, font=font, anchor="ms", fill="white")
 
     return PILHelper.to_native_format(deck, image)

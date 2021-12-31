@@ -5,20 +5,18 @@ import threading
 import re
 import json
 import subprocess
-from signal import signal, SIGUSR1, SIGTERM
+from signal import signal, SIGUSR1
 from time import sleep
 
 import pynput
-from pynput.keyboard import Key, Controller, KeyCode
+from pynput.keyboard import Controller
 
 from pathlib import Path
 from typing import Dict
 
-import psutil
-from PIL import Image
 from StreamDeck.DeviceManager import DeviceManager
 from StreamDeck.Devices import StreamDeck
-from StreamDeck.ImageHelpers import PILHelper
+
 
 import utils
 
@@ -55,7 +53,7 @@ def toggle(deck_id: str, page: str, key: str):
 
 
 def save_file():
-    with open(os.path.join(Path.home(), 'streamdeck/streamdeck4p.json'), 'w') as f:
+    with open('streamdeck4p.json', 'w') as f:
         f.write(json.dumps(state, indent=2))
 
 
@@ -95,10 +93,10 @@ def key_change_callback(deck, key, button_pressed):
 
 def load_state(insert_pid: bool):
     global state
-    txt = Path(os.path.join(Path.home(), 'streamdeck/streamdeck4p.json')).read_text()
+    txt = Path('streamdeck4p.json').read_text()
     state = json.loads(txt)
 
-    json_files = glob.glob(os.path.join(Path.home() , 'streamdeck/streamdeck4p-*.json'))
+    json_files = glob.glob('streamdeck4p-*.json')
     for path in json_files:
         txt2 = Path(path).read_text()
         state = utils.update_dict(state, json.loads(txt2))
@@ -120,10 +118,13 @@ def render_gui(a, b):
                 img_url = deck_state[page][str(key)]["image_url"]
                 replaced_img = replace_with_state(deck_id, page, img_url, False)
                 text = ""
+                mode = ""
+                if "image_mode" in deck_state[page][str(key)]:
+                    mode = deck_state[page][str(key)]["image_mode"]
                 if "text" in deck_state[page][str(key)]:
                     text = deck_state[page][str(key)]["text"]
                 replaced_text = replace_with_state(deck_id, page, text, False)
-                image = utils.generate_image(deck, replaced_img, replaced_text)
+                image = utils.generate_image(deck, replaced_img, replaced_text, mode)
                 with deck:
                     deck.set_key_image(key, image)
             else:
