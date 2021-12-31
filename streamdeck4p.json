@@ -1,0 +1,42 @@
+{
+  "DL38K1A00645": {
+    "current_page": "0",
+    "0": {
+      "0": {
+        "image_mode": "full",
+        "text": "$_state_0_$",
+        "toggle_index": 3,
+        "internal_state": [
+          "local",
+          "int",
+          "sandbox",
+          "prod"
+        ],
+        "image_url": "icons/$_state_0_$.png"
+      },
+      "1": {
+        "toggle_index": 0,
+        "internal_state": [
+          "db",
+          "chrome",
+          "intellij",
+          "postman"
+        ],
+        "text": "$_state_1_$",
+        "image_url": "icons/$_state_1_$.png"
+      },
+      "2": {
+        "next_page": "Postman",
+        "image_url": "icons/postman.png"
+      }
+    },
+    "Postman": {
+      "2": {
+        "next_page": "0",
+        "image_url": "icons/db.png",
+        "text": "abc"
+      }
+    }
+  },
+  "pid": 5783
+}
