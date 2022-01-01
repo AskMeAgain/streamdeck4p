@@ -3,7 +3,7 @@
 This project is a python script to control your streamdeck.
 
 The difference to all the other solutions is that you can do toggles and keep a persisted state on each button, which
-can be referenced by other buttons too!
+can be referenced by other buttons.
 
 ## Example
 
@@ -19,7 +19,7 @@ See the streamdeck4p.json file for an example.
 * configuration is done via json file(s)
 * unlimited pages
 * toggles!
-* write any text
+* write any text via key presses
 * start any process
 * show pictures/text and exchange picture/text based on a toggle
 
@@ -48,7 +48,7 @@ A button can have the following fields:
 | Field        | Description                                                                                   |
 |--------------|-----------------------------------------------------------------------------------------------|
 | text         | The text which is displayed on the streamdeck                                                 |
-| keys         | the text which will be written via key presses                                                |
+| keys         | the text which will be written via key presses. Check out [Key presses](#Keypresses)          |
 | command      | the command which will be executed in a subshell                                              |
 | image_mode   | if full, the text will not be placed at the bottom, but in the middle of the button           |
 | image_url    | url to the button image                                                                       |
@@ -106,3 +106,13 @@ as it uses the "state" array to do its lookup (-> sandbox).
 
 **if you have atleast one state array, then there needs to exist a state arrray called "state", or else the application
 will not work**
+
+## Keypresses
+
+Pynput is used under the hood.
+
+each keypress will be separated by comma (","), key combinations can be done via plus ("+")
+
+    "e,c,h,o,<space>,t,e,s,t,<enter>"
+    "<ctrl>+<f1>,a,b,c,d"
+    "<ctrl>+<shift>+a
