@@ -6,7 +6,7 @@
         "command": "echo $_text_state_0_$",
         "image_mode": "full",
         "text": "$_text_state_0_$",
-        "toggle_index": 1,
+        "toggle_index": 3,
         "state": [
           "local",
           "int",
@@ -22,13 +22,14 @@
         "image_url": "icons/$_state_0_$.png"
       },
       "1": {
-        "toggle_index": 1,
+        "toggle_index": 3,
         "state": [
           "db",
           "chrome",
           "intellij",
           "postman"
         ],
+        "keys": "<ctrl>+<f1>",
         "text": "$_state_1_$",
         "image_url": "icons/$_state_1_$.png"
       },
@@ -45,5 +46,5 @@
       }
     }
   },
-  "pid": 2268
+  "pid": 6380
 }

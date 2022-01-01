@@ -41,7 +41,7 @@ def execute_command(deck_id: str, page: str, command: str) -> bool:
     fixed_command = replace_with_state(deck_id, page, command)
     utils.message("StreamDeck4p", "Starting process")
     subprocess.run(fixed_command.split(" "))
-    utils.message("StreamDeck4p", "Starting process")
+    utils.message("StreamDeck4p", "Ending process")
     return True
 
 
@@ -59,21 +59,24 @@ def save_file():
 def press_keys(deck_id: str, page: str, keys: str):
     replaced_keys = replace_with_state(deck_id, page, keys)
     for frame_key in replaced_keys.split(","):
-        for key in pynput.keyboard.HotKey.parse(frame_key):
-            keyboard.press(key)
-        sleep(0.01)
-        for key in pynput.keyboard.HotKey.parse(frame_key):
-            keyboard.release(key)
+        if frame_key.startswith("sep->"):
+            frame_key = ",".join(frame_key[5:])
+        for fixed_frame_key in frame_key.split(","):
+            for key in pynput.keyboard.HotKey.parse(fixed_frame_key):
+                keyboard.press(key)
+            sleep(0.01)
+            for key in pynput.keyboard.HotKey.parse(fixed_frame_key):
+                keyboard.release(key)
 
 
 def button_activated(deck_id: str, page: str, key: str):
     command_worked = True
     if "command" in state[deck_id][page][key]:
         command_worked = execute_command(deck_id, page, state[deck_id][page][key]["command"])
-    if command_worked:
-        toggle(deck_id, page, key)
     if "keys" in state[deck_id][page][key]:
         press_keys(deck_id, page, state[deck_id][page][key]["keys"])
+    if command_worked:
+        toggle(deck_id, page, key)
     if "next_page" in state[deck_id][page][key]:
         state[deck_id]["current_page"] = state[deck_id][page][key]["next_page"]
     save_file()
