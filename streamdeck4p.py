@@ -146,7 +146,7 @@ def cli_switches() -> bool:
         streamdecks = DeviceManager().enumerate()
         for index, deck in enumerate(streamdecks):
             deck.open()
-            print(f"Found StreamDeck: {deck.get_serial_number()}")
+            print(f"Found StreamDeck of type '{deck.deck_type()}' with SerialId '{deck.get_serial_number()}'")
             deck.close()
         return True
     else:

@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "pythonproject"
+name = "streamdeck4p"
 version = "0.1.0"
 description = ""
 authors = ["AskMeAgain <20632124+AskMeAgain@users.noreply.github.com>"]
