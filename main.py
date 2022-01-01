@@ -25,22 +25,20 @@ decks: StreamDeck = []
 key_board: Controller
 
 
-def replace_with_state(deck_id: str, page: str, line: str, comma_separated: bool) -> str:
-    groups = re.search("\\$_state_(.*)_\\$", line)
+def replace_with_state(deck_id: str, page: str, line: str) -> str:
+    groups = re.search("\\$_(.*)_(.*)_\\$", line)
     if not groups:
         return line
-    new_key = groups.group(1)
+    state_arr = groups.group(1)
+    new_key = groups.group(2)
     resolved_btn = state[deck_id][page][new_key]
-    resolved_state = resolved_btn["internal_state"][resolved_btn["toggle_index"]]
+    resolved_state = resolved_btn[state_arr][resolved_btn["toggle_index"]]
 
-    if comma_separated:
-        resolved_state = ",".join(resolved_state)
-
-    return line.replace(f"$_state_{new_key}_$", resolved_state)
+    return line.replace(f"$_{state_arr}_{new_key}_$", resolved_state)
 
 
 def execute_command(deck_id: str, page: str, command: str) -> bool:
-    fixed_command = replace_with_state(deck_id, page, command, False)
+    fixed_command = replace_with_state(deck_id, page, command)
     print(f"Executing command: {fixed_command}")
     subprocess.run(fixed_command.split(" "))
     return True
@@ -49,7 +47,7 @@ def execute_command(deck_id: str, page: str, command: str) -> bool:
 def toggle(deck_id: str, page: str, key: str):
     if "toggle_index" in state[deck_id][page][key]:
         state[deck_id][page][key]["toggle_index"] += 1
-        state[deck_id][page][key]["toggle_index"] %= len(state[deck_id][page][key]["internal_state"])
+        state[deck_id][page][key]["toggle_index"] %= len(state[deck_id][page][key]["state"])
 
 
 def save_file():
@@ -58,7 +56,7 @@ def save_file():
 
 
 def press_keys(deck_id: str, page: str, keys: str):
-    replaced_keys = replace_with_state(deck_id, page, keys, True)
+    replaced_keys = replace_with_state(deck_id, page, keys)
     for frame_key in replaced_keys.split(","):
         for key in pynput.keyboard.HotKey.parse(frame_key):
             keyboard.press(key)
@@ -116,15 +114,14 @@ def render_gui(a, b):
 
             if page in deck_state and str(key) in deck_state[page] and "image_url" in deck_state[page][str(key)]:
                 img_url = deck_state[page][str(key)]["image_url"]
-                replaced_img = replace_with_state(deck_id, page, img_url, False)
+                replaced_img = replace_with_state(deck_id, page, img_url)
                 text = ""
                 mode = ""
                 if "image_mode" in deck_state[page][str(key)]:
                     mode = deck_state[page][str(key)]["image_mode"]
                 if "text" in deck_state[page][str(key)]:
-                    text = deck_state[page][str(key)]["text"]
-                replaced_text = replace_with_state(deck_id, page, text, False)
-                image = utils.generate_image(deck, replaced_img, replaced_text, mode)
+                    text = replace_with_state(deck_id, page, deck_state[page][str(key)]["text"])
+                image = utils.generate_image(deck, replaced_img, text, mode)
                 with deck:
                     deck.set_key_image(key, image)
             else:
