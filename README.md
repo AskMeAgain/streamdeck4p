@@ -2,6 +2,8 @@
 
 This project is a python script to control your streamdeck.
 
+It is loosely based on [timothycrosley's Streamdeck-ui](https://github.com/timothycrosley/streamdeck-ui)
+
 The difference to all the other solutions is that you can do toggles and keep a persisted state on each button, which
 can be referenced by other buttons.
 
