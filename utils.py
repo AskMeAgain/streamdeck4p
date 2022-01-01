@@ -1,9 +1,10 @@
+import os
+
 from PIL import Image, ImageDraw, ImageFont
 from StreamDeck.ImageHelpers import PILHelper
 
 
 def update_list(original, update):
-    # Make sure the order is equal, otherwise it is hard to compare the items.
     assert len(original) == len(update), "Can only handle equal length lists."
 
     for idx, (val_original, val_update) in enumerate(zip(original, update)):
@@ -21,12 +22,10 @@ def update_list(original, update):
 def update_dict(original, update):
     for key, value in update.items():
 
-        # Add new key values
         if key not in original:
             original[key] = update[key]
             continue
 
-        # Update the old key values with the new key values
         if key in original:
             if isinstance(value, dict):
                 update_dict(original[key], update[key])
@@ -55,3 +54,7 @@ def generate_image(deck, icon_filename, text: str, image_mode: str) -> Image:
     draw.text((image.width / 2, text_height), text=text, font=font, anchor="ms", fill="white")
 
     return PILHelper.to_native_format(deck, image)
+
+
+def message(title, message):
+  os.system('notify-send "'+title+'" "'+message+'"')

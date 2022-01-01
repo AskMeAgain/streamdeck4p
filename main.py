@@ -39,8 +39,9 @@ def replace_with_state(deck_id: str, page: str, line: str) -> str:
 
 def execute_command(deck_id: str, page: str, command: str) -> bool:
     fixed_command = replace_with_state(deck_id, page, command)
-    print(f"Executing command: {fixed_command}")
+    utils.message("StreamDeck4p", "Starting process")
     subprocess.run(fixed_command.split(" "))
+    utils.message("StreamDeck4p", "Starting process")
     return True
 
 

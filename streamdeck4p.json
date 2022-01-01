@@ -3,9 +3,10 @@
     "current_page": "0",
     "0": {
       "0": {
+        "command": "echo $_text_state_0_$",
         "image_mode": "full",
         "text": "$_text_state_0_$",
-        "toggle_index": 0,
+        "toggle_index": 1,
         "state": [
           "local",
           "int",
@@ -44,5 +45,5 @@
       }
     }
   },
-  "pid": 1874
+  "pid": 2268
 }
