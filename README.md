@@ -100,9 +100,10 @@ if button 10 defines an array called abc_def[a,b,c,d,e], any button on the same 
 by using a string like: $_abc_def_10_$. Now the toggle_index of button 10 is used to determine the correct value: if the
 toggle_index is 3, then $_abc_def_0_$ is getting replaced with d.
 
-In the example above, button 0 tries to displays the text **_$_text_state_0_$_** on the lcd, which is getting interpolated from "
-text_state". Currently _toggle_index_ is 3, that means "1231123" is getting displayed. The image_url is differently calculated,
-as it uses the "state" array to do its lookup (-> sandbox).
+In the example above, button 0 tries to displays the text **_$_text_state_0_$_** on the lcd, which is getting
+interpolated from "
+text_state". Currently _toggle_index_ is 3, that means "1231123" is getting displayed. The image_url is differently
+calculated, as it uses the "state" array to do its lookup (-> sandbox).
 
 **if you have atleast one state array, then there needs to exist a state arrray called "state", or else the application
 will not work**
@@ -116,3 +117,17 @@ each keypress will be separated by comma (","), key combinations can be done via
     "e,c,h,o,<space>,t,e,s,t,<enter>"
     "<ctrl>+<f1>,a,b,c,d"
     "<ctrl>+<shift>+a
+
+## External Changes
+
+You can change the json files externally and trigger an usr1 signal on the command to reload the page.
+
+    kill -USR1 PID_OF_THE_PYTHON_SCRIPT
+
+You can also just run the python script again with the --reload-config flag to reload the configs.
+
+    python3 streamdeck4p.py --reload-config STREAMDECK_SERIAL_ID
+
+There is also a switch_page switch to change the current page
+
+    python3 streamdeck4p.py --switch-page STREAMDECK_SERIAL_ID PAGE_NAME

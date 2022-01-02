@@ -116,9 +116,11 @@ def render_gui(a, b):
             deck_state = state[deck_id]
             page = deck_state["current_page"]
 
-            if page in deck_state and str(key) in deck_state[page] and "image_url" in deck_state[page][str(key)]:
-                img_url = deck_state[page][str(key)]["image_url"]
-                replaced_img = replace_with_state(deck_id, page, img_url)
+            if page in deck_state and str(key) in deck_state[page]:
+                replaced_img = None
+                if "image_url" in deck_state[page][str(key)]:
+                    img_url = deck_state[page][str(key)]["image_url"]
+                    replaced_img = replace_with_state(deck_id, page, img_url)
                 text = ""
                 mode = ""
                 if "image_mode" in deck_state[page][str(key)]:
@@ -134,6 +136,10 @@ def render_gui(a, b):
 
 
 def cli_switches() -> bool:
+    if "--reload-config" in sys.argv:
+        load_state(False)
+        subprocess.run(["kill", "-USR1", str(state["pid"])])
+        return True
     if "--switch-page" in sys.argv:
         load_state(False)
         deck_id = sys.argv[2]

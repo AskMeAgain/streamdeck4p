@@ -37,7 +37,10 @@ def update_dict(original, update):
 
 
 def generate_image(deck, icon_filename, text: str, image_mode: str) -> Image:
-    icon = Image.open(icon_filename)
+    if icon_filename:
+        icon = Image.open(icon_filename)
+    else:
+        icon = PILHelper.create_image(deck)
     normal_margin = 5
     if image_mode == "full":
         normal_margin = 0

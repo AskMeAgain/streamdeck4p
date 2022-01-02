@@ -6,7 +6,7 @@
         "command": "echo $_text_state_0_$",
         "image_mode": "full",
         "text": "$_text_state_0_$",
-        "toggle_index": 0,
+        "toggle_index": 1,
         "state": [
           "local",
           "int",
@@ -21,7 +21,7 @@
         ]
       },
       "1": {
-        "toggle_index": 3,
+        "toggle_index": 0,
         "state": [
           "db",
           "chrome",
@@ -42,5 +42,5 @@
       }
     }
   },
-  "pid": 2450
+  "pid": 1944
 }
