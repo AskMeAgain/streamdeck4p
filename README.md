@@ -88,7 +88,7 @@ Example streamdeck4p.json:
 
 ## State
 
-any substring with the pattern `$_STATESTORENAME_KEYNAME_$` (examples: $_text_state_0_$, or $_abc_123_$)
+any substring with the pattern `$_STATESTORENAME_KEYNAME_$` (examples: `$_text_state_0_$`, or `$_abc_123_$`)
 is getting interpolated **before** it gets processed by the specific routing:
 
 * Before a text is written
@@ -99,12 +99,11 @@ is getting interpolated **before** it gets processed by the specific routing:
 A lookup happens based on the State store name and key number:
 
 if button 10 defines an array called abc_def[a,b,c,d,e], any button on the same page can do a lookup in this statestore
-by using a string like: $_abc_def_10_$. Now the toggle_index of button 10 is used to determine the correct value: if the
-toggle_index is 3, then $_abc_def_0_$ is getting replaced with d.
+by using a string like: `$_abc_def_10_$`. Now the toggle_index of button 10 is used to determine the correct value: if the
+toggle_index is 3, then `$_abc_def_0_$` is getting replaced with d.
 
-In the example above, button 0 tries to displays the text **_$_text_state_0_$_** on the lcd, which is getting
-interpolated from "
-text_state". Currently _toggle_index_ is 3, that means "1231123" is getting displayed. The image_url is differently
+In the example above, button 10 tries to displays the text `$_text_state_0_$` on the lcd, which is getting
+interpolated from "text_state". Currently _toggle_index_ is 3, that means "1231123" is getting displayed. The image_url is differently
 calculated, as it uses the "state" array to do its lookup (-> sandbox).
 
 **if you have atleast one state array, then there needs to exist a state arrray called "state", or else the application
@@ -118,7 +117,7 @@ each keypress will be separated by comma (","), key combinations can be done via
 
     "e,c,h,o,<space>,t,e,s,t,<enter>"
     "<ctrl>+<f1>,a,b,c,d"
-    "<ctrl>+<shift>+a
+    "<ctrl>+<shift>+a"
 
 ## External Changes
 
