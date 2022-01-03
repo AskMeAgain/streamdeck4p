@@ -11,7 +11,7 @@ can be referenced by other buttons.
 
 Have one button to select a dev environment (local -> int -> sandbox -> prod), pressing the button will iterate over the
 list and will show a different text + image based on the name of the environment. Other buttons now execute their script
-based on the state of the environment toggle. All via an extremly simple mechanism. Also each toggle state can have a
+based on the state of the environment toggle. All via an extremely simple mechanism. Also each toggle state can have a
 different picture.
 
 See the streamdeck4p.json file for an example.
@@ -122,7 +122,7 @@ each keypress will be separated by comma (","), key combinations can be done via
 
 ## External Changes
 
-You can change the json files externally and trigger an usr1 signal on the command to reload the page.
+You can change the json files externally and trigger an usr1 signal on the running script to reload the page.
 
     kill -USR1 PID_OF_THE_PYTHON_SCRIPT
 
@@ -133,3 +133,7 @@ You can also just run the python script again with the --reload-config flag to r
 There is also a switch_page switch to change the current page
 
     python3 streamdeck4p.py --switch-page STREAMDECK_SERIAL_ID PAGE_NAME
+
+To shutdown the script, press CTRL + C, kill it via SIGINT or via the script itself
+
+    python3 streamdeck4p.py --exit

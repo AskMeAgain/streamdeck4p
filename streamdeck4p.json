@@ -4,9 +4,10 @@
     "0": {
       "0": {
         "command": "echo $_text_state_0_$",
+        "keys": "a,c,d,e,f,g",
         "image_mode": "full",
         "text": "$_text_state_0_$",
-        "toggle_index": 1,
+        "toggle_index": 2,
         "state": [
           "local",
           "int",
@@ -42,5 +43,5 @@
       }
     }
   },
-  "pid": 1944
+  "pid": 2244
 }

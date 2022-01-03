@@ -5,7 +5,7 @@ import threading
 import re
 import json
 import subprocess
-from signal import signal, SIGUSR1
+from signal import signal, SIGUSR1, SIGUSR2, SIGKILL, SIGTERM, SIGINT
 from time import sleep
 
 import pynput
@@ -16,7 +16,6 @@ from typing import Dict
 
 from StreamDeck.DeviceManager import DeviceManager
 from StreamDeck.Devices import StreamDeck
-
 
 import utils
 
@@ -38,6 +37,7 @@ def replace_with_state(deck_id: str, page: str, line: str) -> str:
 
 
 def execute_command(deck_id: str, page: str, command: str) -> bool:
+    print("Executing command.")
     fixed_command = replace_with_state(deck_id, page, command)
     utils.message("StreamDeck4p", "Starting process")
     subprocess.run(fixed_command.split(" "))
@@ -52,35 +52,40 @@ def toggle(deck_id: str, page: str, key: str):
 
 
 def save_file():
+    print("Saving file.")
     with open('streamdeck4p.json', 'w') as f:
         f.write(json.dumps(state, indent=2))
 
 
 def press_keys(deck_id: str, page: str, keys: str):
+    print("Pressing keys.")
     replaced_keys = replace_with_state(deck_id, page, keys)
     for frame_key in replaced_keys.split(","):
         if frame_key.startswith("sep->"):
             frame_key = ",".join(frame_key[5:])
         for fixed_frame_key in frame_key.split(","):
             for key in pynput.keyboard.HotKey.parse(fixed_frame_key):
-                keyboard.press(key)
+                key_board.press(key)
             sleep(0.01)
             for key in pynput.keyboard.HotKey.parse(fixed_frame_key):
-                keyboard.release(key)
+                key_board.release(key)
 
 
 def button_activated(deck_id: str, page: str, key: str):
-    command_worked = True
-    if "command" in state[deck_id][page][key]:
-        command_worked = execute_command(deck_id, page, state[deck_id][page][key]["command"])
-    if "keys" in state[deck_id][page][key]:
-        press_keys(deck_id, page, state[deck_id][page][key]["keys"])
-    if command_worked:
-        toggle(deck_id, page, key)
-    if "next_page" in state[deck_id][page][key]:
-        state[deck_id]["current_page"] = state[deck_id][page][key]["next_page"]
-    save_file()
-    render_gui('', '')
+    try:
+        command_worked = True
+        if "command" in state[deck_id][page][key]:
+            command_worked = execute_command(deck_id, page, state[deck_id][page][key]["command"])
+        if "keys" in state[deck_id][page][key]:
+            press_keys(deck_id, page, state[deck_id][page][key]["keys"])
+        if command_worked:
+            toggle(deck_id, page, key)
+        if "next_page" in state[deck_id][page][key]:
+            state[deck_id]["current_page"] = state[deck_id][page][key]["next_page"]
+        save_file()
+        render_gui('', '')
+    except Exception as e:
+        print(f"Button pressed and got error while executing process: {e}")
 
 
 def key_change_callback(deck, key, button_pressed):
@@ -140,6 +145,10 @@ def cli_switches() -> bool:
         load_state(False)
         subprocess.run(["kill", "-USR1", str(state["pid"])])
         return True
+    if "--exit" in sys.argv:
+        load_state(False)
+        subprocess.run(["kill", "-SIGTERM", str(state["pid"])])
+        return True
     if "--switch-page" in sys.argv:
         load_state(False)
         deck_id = sys.argv[2]
@@ -153,35 +162,67 @@ def cli_switches() -> bool:
         for index, deck in enumerate(streamdecks):
             deck.open()
             print(f"Found StreamDeck of type '{deck.deck_type()}' with SerialId '{deck.get_serial_number()}'")
-            deck.close()
+            with deck:
+                deck.close()
         return True
     else:
         return False
 
 
+def exit_application_sigterm(a, b):
+    print("Closing application due to sigterm signal.")
+    global decks
+    for d in decks:
+        with d:
+            d.reset()
+            d.close()
+
+
+def exit_application_sigint(a, b):
+    print("Closing application due to sigint signal.")
+    global decks
+    for deck in decks:
+        with deck:
+            deck.reset()
+            deck.close()
+
+
+def method_name():
+    global key_board, decks
+
+    key_board = Controller()
+    decks = list()
+    load_state(True)
+    for index, deck in enumerate(DeviceManager().enumerate()):
+        deck.open()
+        deck.reset()
+
+        decks.append(deck)
+
+        render_gui("", "")
+
+        deck.set_key_callback(key_change_callback)
+
+        signal(SIGUSR1, render_gui)
+        signal(SIGTERM, exit_application_sigterm)
+        signal(SIGINT, exit_application_sigint)
+
+        for t in threading.enumerate():
+            try:
+                t.join()
+            except RuntimeError:
+                pass
+
+
 if __name__ == '__main__':
 
     if not cli_switches():
-        streamdecks = DeviceManager().enumerate()
-
-        keyboard = Controller()
-        decks = list()
-        load_state(True)
-
-        for index, deck in enumerate(streamdecks):
-            deck.open()
-            deck.reset()
-
-            decks.append(deck)
-
-            render_gui("", "")
-
-            deck.set_key_callback(key_change_callback)
-            signal(SIGUSR1, render_gui)
-
-            for t in threading.enumerate():
-                if t is threading.currentThread():
-                    continue
-
-                if t.is_alive():
-                    t.join()
+        try:
+            method_name()
+        except KeyboardInterrupt:
+            print("Got keyboard interrupted. Closing now gracefully.")
+            for deck in decks:
+                with deck:
+                    deck.reset()
+                    deck.close()
+            sys.exit()
