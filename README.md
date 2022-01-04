@@ -49,14 +49,14 @@ A button can have the following fields:
 
 | Field        | Description                                                                                        |
 |--------------|----------------------------------------------------------------------------------------------------|
-| text         | The text which is displayed on the streamdeck                                                      |
+| text         | The text which is displayed on the streamdeck. FontAwesome compatible (see [here](#FontAwesome))   |
 | keys         | the text which will be written via key presses. Check out [Key presses](#Keypresses)               |
 | command      | the command which will be executed in a subshell                                                   |
 | image_mode   | if full, the text will not be placed at the bottom, but in the middle of the button                |
 | image_url    | url to the button image                                                                            |
 | toggle_index | internal array pointer of the toggle. This index will count up whenever the button is pressed      |
 | notification | if you set this to true, then a system inotify call will be made when you start and stop a command |
-| text_color   | Color of the text                                                                                  |                                                                                     |
+| text_color   | Color of the text (white, blue, black etc)                                                         |                                                                                     |
 | text_size    | Size of the text                                                                                   |                                                                                     |
 | ANY LIST     | Please check out [State](#State)                                                                   |
 
