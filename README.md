@@ -47,15 +47,16 @@ streamdeck minus 1.
 
 A button can have the following fields:
 
-| Field        | Description                                                                                   |
-|--------------|-----------------------------------------------------------------------------------------------|
-| text         | The text which is displayed on the streamdeck                                                 |
-| keys         | the text which will be written via key presses. Check out [Key presses](#Keypresses)          |
-| command      | the command which will be executed in a subshell                                              |
-| image_mode   | if full, the text will not be placed at the bottom, but in the middle of the button           |
-| image_url    | url to the button image                                                                       |
-| toggle_index | internal array pointer of the toggle. This index will count up whenever the button is pressed |
-| ANY LIST     | Please check out [State](#State)                                                              |
+| Field        | Description                                                                                        |
+|--------------|----------------------------------------------------------------------------------------------------|
+| text         | The text which is displayed on the streamdeck                                                      |
+| keys         | the text which will be written via key presses. Check out [Key presses](#Keypresses)               |
+| command      | the command which will be executed in a subshell                                                   |
+| image_mode   | if full, the text will not be placed at the bottom, but in the middle of the button                |
+| image_url    | url to the button image                                                                            |
+| toggle_index | internal array pointer of the toggle. This index will count up whenever the button is pressed      |
+| notification | if you set this to true, then a system inotify call will be made when you start and stop a command |
+| ANY LIST     | Please check out [State](#State)                                                                   |
 
 Example streamdeck4p.json:
 
@@ -67,6 +68,7 @@ Example streamdeck4p.json:
             "command": "echo $_text_state_0_$",
             "image_mode": "full",
             "text": "$_text_state_0_$",
+            "notification": True,
             "toggle_index": 3,
             "state": [
               "local",
@@ -99,12 +101,12 @@ is getting interpolated **before** it gets processed by the specific routing:
 A lookup happens based on the State store name and key number:
 
 if button 10 defines an array called abc_def[a,b,c,d,e], any button on the same page can do a lookup in this statestore
-by using a string like: `$_abc_def_10_$`. Now the toggle_index of button 10 is used to determine the correct value: if the
-toggle_index is 3, then `$_abc_def_0_$` is getting replaced with d.
+by using a string like: `$_abc_def_10_$`. Now the toggle_index of button 10 is used to determine the correct value: if
+the toggle_index is 3, then `$_abc_def_0_$` is getting replaced with d.
 
-In the example above, button 10 tries to displays the text `$_text_state_0_$` on the lcd, which is getting
-interpolated from "text_state". Currently _toggle_index_ is 3, that means "1231123" is getting displayed. The image_url is differently
-calculated, as it uses the "state" array to do its lookup (-> sandbox).
+In the example above, button 10 tries to displays the text `$_text_state_0_$` on the lcd, which is getting interpolated
+from "text_state". Currently _toggle_index_ is 3, that means "1231123" is getting displayed. The image_url is
+differently calculated, as it uses the "state" array to do its lookup (-> sandbox).
 
 **if you have atleast one state array, then there needs to exist a state arrray called "state", or else the application
 will not work**
@@ -113,11 +115,18 @@ will not work**
 
 Pynput is used under the hood.
 
-each keypress will be separated by comma (","), key combinations can be done via plus ("+")
+each keypress will be separated by comma (","), key combinations can be done via plus ("+"). 
+
+If you want to write a
+bigger word, then you can add the prefix "sep->" to **sep**arate the complete word by comma.
+
+If you want to wait for some time you can add delay, to wait for 0.25 seconds
 
     "e,c,h,o,<space>,t,e,s,t,<enter>"
+    "e,c,h,o,delay,<space>" //waits 0.25 seconds until pressing enter
     "<ctrl>+<f1>,a,b,c,d"
     "<ctrl>+<shift>+a"
+    "sep->HELLOWORLD" //this will be handled as H,E,L,L,O,W,O,R,L,D
 
 ## External Changes
 

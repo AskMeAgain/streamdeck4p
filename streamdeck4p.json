@@ -4,7 +4,8 @@
     "0": {
       "0": {
         "command": "echo $_text_state_0_$",
-        "keys": "a,c,d,e,f,g",
+        "notification": "True",
+        "keys": "sep->sandbox,delay,delay,delay,delay,delay,sep->abasdasdasdasdasdasdasdasdasdasdasas",
         "image_mode": "full",
         "text": "$_text_state_0_$",
         "toggle_index": 2,
@@ -43,5 +44,5 @@
       }
     }
   },
-  "pid": 2244
+  "pid": 1932
 }

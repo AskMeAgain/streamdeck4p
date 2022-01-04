@@ -36,12 +36,19 @@ def replace_with_state(deck_id: str, page: str, line: str) -> str:
     return line.replace(f"$_{state_arr}_{new_key}_$", resolved_state)
 
 
-def execute_command(deck_id: str, page: str, command: str) -> bool:
+def execute_command(deck_id: str, page: str, btn_state: Dict[str, str]) -> bool:
     print("Executing command.")
+    command = btn_state["command"]
     fixed_command = replace_with_state(deck_id, page, command)
-    utils.message("StreamDeck4p", "Starting process")
+
+    if "notification" in btn_state and btn_state["notification"]:
+        utils.message("StreamDeck4p", "Starting process")
+
     subprocess.run(fixed_command.split(" "))
-    utils.message("StreamDeck4p", "Ending process")
+
+    if "notification" in btn_state and btn_state["notification"]:
+        utils.message("StreamDeck4p", "Ending process")
+
     return True
 
 
@@ -64,6 +71,9 @@ def press_keys(deck_id: str, page: str, keys: str):
         if frame_key.startswith("sep->"):
             frame_key = ",".join(frame_key[5:])
         for fixed_frame_key in frame_key.split(","):
+            if "delay" == fixed_frame_key:
+                sleep(0.25)
+                continue
             for key in pynput.keyboard.HotKey.parse(fixed_frame_key):
                 key_board.press(key)
             sleep(0.01)
@@ -75,7 +85,7 @@ def button_activated(deck_id: str, page: str, key: str):
     try:
         command_worked = True
         if "command" in state[deck_id][page][key]:
-            command_worked = execute_command(deck_id, page, state[deck_id][page][key]["command"])
+            command_worked = execute_command(deck_id, page, state[deck_id][page][key])
         if "keys" in state[deck_id][page][key]:
             press_keys(deck_id, page, state[deck_id][page][key]["keys"])
         if command_worked:
