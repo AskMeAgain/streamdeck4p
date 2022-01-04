@@ -7,7 +7,8 @@
         "notification": "True",
         "keys": "sep->sandbox,delay,delay,delay,delay,delay,sep->abasdasdasdasdasdasdasdasdasdasdasas",
         "image_mode": "full",
-        "text": "$_text_state_0_$",
+        "text": "fa->\uF2b9",
+        "text_size": 30,
         "toggle_index": 3,
         "state": [
           "local",

@@ -56,6 +56,8 @@ A button can have the following fields:
 | image_url    | url to the button image                                                                            |
 | toggle_index | internal array pointer of the toggle. This index will count up whenever the button is pressed      |
 | notification | if you set this to true, then a system inotify call will be made when you start and stop a command |
+| text_color   | Color of the text                                                                                  |                                                                                     |
+| text_size    | Size of the text                                                                                   |                                                                                     |
 | ANY LIST     | Please check out [State](#State)                                                                   |
 
 Example streamdeck4p.json:
@@ -115,10 +117,9 @@ will not work**
 
 Pynput is used under the hood.
 
-each keypress will be separated by comma (","), key combinations can be done via plus ("+"). 
+each keypress will be separated by comma (","), key combinations can be done via plus ("+").
 
-If you want to write a
-bigger word, then you can add the prefix "sep->" to **sep**arate the complete word by comma.
+If you want to write a bigger word, then you can add the prefix "sep->" to **sep**arate the complete word by comma.
 
 If you want to wait for some time you can add delay, to wait for 0.25 seconds
 
@@ -145,3 +146,12 @@ There is also a switch_page switch to change the current page
 To shutdown the script, press CTRL + C, kill it via SIGINT or via the script itself
 
     python3 streamdeck4p.py --exit
+
+## FontAwesome
+
+[FontAwesome](https://github.com/FortAwesome/Font-Awesome) is also integrated into this script. If you want to display
+font awesome icons instead of pictures just display a text only, 
+and prefix the **unicode** font awesome icon with "fa->". Also the F
+needs to be in uppercase:
+
+    "text": "fa->\uF2b9"

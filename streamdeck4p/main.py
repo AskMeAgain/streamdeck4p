@@ -142,7 +142,7 @@ def render_gui(a, b):
                     mode = deck_state[page][str(key)]["image_mode"]
                 if "text" in deck_state[page][str(key)]:
                     text = replace_with_state(deck_id, page, deck_state[page][str(key)]["text"])
-                image = utils.generate_image(deck, replaced_img, text, mode)
+                image = utils.generate_image(deck, replaced_img, text, mode, deck_state[page][str(key)])
                 with deck:
                     deck.set_key_image(key, image)
             else:

@@ -1,4 +1,5 @@
 import os
+from typing import Dict
 
 from PIL import Image, ImageDraw, ImageFont
 from StreamDeck.ImageHelpers import PILHelper
@@ -36,7 +37,7 @@ def update_dict(original, update):
     return original
 
 
-def generate_image(deck, icon_filename, text: str, image_mode: str) -> Image:
+def generate_image(deck, icon_filename, text: str, image_mode: str, btn_state: Dict[str, str]) -> Image:
     if icon_filename:
         icon = Image.open(icon_filename)
     else:
@@ -47,17 +48,38 @@ def generate_image(deck, icon_filename, text: str, image_mode: str) -> Image:
     bottom_margin = normal_margin
     if text and image_mode != "full":
         bottom_margin += 15
-    image = PILHelper.create_scaled_image(deck, icon, margins=[normal_margin,normal_margin, bottom_margin, normal_margin])
+    image = PILHelper.create_scaled_image(deck, icon,
+                                          margins=[normal_margin, normal_margin, bottom_margin, normal_margin])
     text_height = image.height - 5
     if image_mode == "full":
-        text_height = image.height / 2 + 5
+        text_height = image.height / 2
 
     draw = ImageDraw.Draw(image)
-    font = ImageFont.truetype("./fonts/Roboto-Regular.ttf", 14)
-    draw.text((image.width / 2, text_height), text=text, font=font, anchor="ms", fill="white")
+
+    text_font_size = 15
+    fa_font_size = 30
+
+    if "text_size" in btn_state:
+        text_font_size = btn_state["text_size"]
+        fa_font_size = btn_state["text_size"]
+
+    if text.startswith("fa->"):
+        font = ImageFont.truetype("./fonts/fa-regular-400.ttf", fa_font_size)
+        text = text[4:]
+        text_height += fa_font_size / 4
+    else:
+        font = ImageFont.truetype("./fonts/Roboto-Regular.ttf", text_font_size)
+        text_height += text_font_size / 3
+
+
+    textcolor = "white"
+    if "text_color" in btn_state:
+        textcolor = btn_state["text_color"]
+
+    draw.text((image.width / 2, text_height), text=text, font=font, anchor="ms", fill=textcolor)
 
     return PILHelper.to_native_format(deck, image)
 
 
 def message(title, message):
-  os.system('notify-send "'+title+'" "'+message+'"')
+    os.system('notify-send "' + title + '" "' + message + '"')
