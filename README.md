@@ -29,13 +29,13 @@ See the streamdeck4p.json file for an example.
 
 1. clone this repo somewhere
 2. Install [poetry](https://python-poetry.org/)
-3. execute `poetry update`
+3. execute `poetry install`
 4. Plugin your streamdeck
-5. find your streamdeck SerialId by running `python3 streamdeck4p.py --show-devices`
+5. find your streamdeck SerialId by running `poetry run streamdeck4p --show-devices`
 6. Create/update the streamdeck4p.json file in this folder
     1. Additionally any file with a name pattern like _streamdeck4p-*.json_ is getting merged into the streamdeck4p.json
        file on startup
-7. Startup the main script via `python3 streamdeck4p.py`
+7. Startup the main script via `poetry run streamdeck4p`
 
 ## json format
 

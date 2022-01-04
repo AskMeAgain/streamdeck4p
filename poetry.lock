@@ -27,7 +27,7 @@ test = ["ipaddress", "mock", "unittest2", "enum34", "pywin32", "wmi"]
 
 [[package]]
 name = "pynput"
-version = "1.7.5"
+version = "1.7.6"
 description = "Monitor and control user input devices"
 category = "main"
 optional = false
@@ -105,7 +105,7 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*"
 
 [[package]]
 name = "streamdeck"
-version = "0.8.5"
+version = "0.9.0"
 description = "Library to control Elgato StreamDeck devices."
 category = "main"
 optional = false
@@ -114,7 +114,7 @@ python-versions = ">=3.8"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "fa9e7bae2feec7b4dcff505d4e714b3eb6d66bee50a16bec253c4d9609c67e50"
+content-hash = "711313792feec33d9491b2f9afdfe5a2138c571e6893214240842f316beebaf3"
 
 [metadata.files]
 evdev = [
@@ -193,9 +193,9 @@ psutil = [
     {file = "psutil-5.9.0.tar.gz", hash = "sha256:869842dbd66bb80c3217158e629d6fceaecc3a3166d3d1faee515b05dd26ca25"},
 ]
 pynput = [
-    {file = "pynput-1.7.5-py2.py3-none-any.whl", hash = "sha256:9c0b6bfd3462ac0234248f3b5a9809a66314e7da0fc3f799c8f29db4a17300dc"},
-    {file = "pynput-1.7.5-py3.9.egg", hash = "sha256:235efd7a58ef7d3aab498aa0da998097bdd0ccae5777b2d23d307e32b67b3609"},
-    {file = "pynput-1.7.5.tar.gz", hash = "sha256:e6b7926dd162a883ff16f38e01720a930bbf2509146c9f1cdcecddd25288fb6e"},
+    {file = "pynput-1.7.6-py2.py3-none-any.whl", hash = "sha256:19861b2a0c430d646489852f89500e0c9332e295f2c020e7c2775e7046aa2e2f"},
+    {file = "pynput-1.7.6-py3.9.egg", hash = "sha256:264429fbe676e98e9050ad26a7017453bdd08768adb25cafb918347cf9f1eb4a"},
+    {file = "pynput-1.7.6.tar.gz", hash = "sha256:3a5726546da54116b687785d38b1db56997ce1d28e53e8d22fc656d8b92e533c"},
 ]
 pyobjc-core = [
     {file = "pyobjc-core-8.1.tar.gz", hash = "sha256:920914a1a4cd4f8a54babe93f0b4e4cd93b51d11ae38d8ef17f5edb603b7a949"},
@@ -238,6 +238,6 @@ six = [
     {file = "six-1.16.0.tar.gz", hash = "sha256:1e61c37477a1626458e36f7b1d82aa5c9b094fa4802892072e49de9c60c4c926"},
 ]
 streamdeck = [
-    {file = "streamdeck-0.8.5-py3-none-any.whl", hash = "sha256:d3f144f0fd6e4e24f5bbe973f2e9dcce383560a1cf437b4fc2a859559e1e959b"},
-    {file = "streamdeck-0.8.5.tar.gz", hash = "sha256:a847eb34490bfbc627c1e13c9306e88af58c2a2685a6bb58d027c9494427527c"},
+    {file = "streamdeck-0.9.0-py3-none-any.whl", hash = "sha256:a2637645deeb9c8fb5ae7532011c2bd5671b909a653f9c54e8a1d744a77ef3db"},
+    {file = "streamdeck-0.9.0.tar.gz", hash = "sha256:f7be77e111cebab6388394b5d2c54dd6a358625e30dbb0317e7197e4c80f65ae"},
 ]

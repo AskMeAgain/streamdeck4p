@@ -6,13 +6,16 @@ authors = ["AskMeAgain <20632124+AskMeAgain@users.noreply.github.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.9"
-streamdeck = "^0.8.5"
+streamdeck = "^0.9.0"
 Pillow = "^8.4.0"
 psutil = "^5.9.0"
-pynput = "^1.7.5"
+pynput = "^1.7.6"
 
 [tool.poetry.dev-dependencies]
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+streamdeck4p = "streamdeck4p.main:start"

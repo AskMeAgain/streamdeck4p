@@ -5,7 +5,7 @@ import threading
 import re
 import json
 import subprocess
-from signal import signal, SIGUSR1, SIGUSR2, SIGKILL, SIGTERM, SIGINT
+from signal import signal, SIGUSR1, SIGTERM, SIGINT
 from time import sleep
 
 import pynput
@@ -17,7 +17,7 @@ from typing import Dict
 from StreamDeck.DeviceManager import DeviceManager
 from StreamDeck.Devices import StreamDeck
 
-import utils
+from streamdeck4p import utils
 
 state: Dict[str, Dict[str, Dict[str, Dict[str, str]]]] = {}
 decks: StreamDeck = []
@@ -60,7 +60,7 @@ def toggle(deck_id: str, page: str, key: str):
 
 def save_file():
     print("Saving file.")
-    with open('streamdeck4p.json', 'w') as f:
+    with open('../streamdeck4p.json', 'w') as f:
         f.write(json.dumps(state, indent=2))
 
 
@@ -224,8 +224,7 @@ def method_name():
                 pass
 
 
-if __name__ == '__main__':
-
+def start():
     if not cli_switches():
         try:
             method_name()
@@ -236,3 +235,7 @@ if __name__ == '__main__':
                     deck.reset()
                     deck.close()
             sys.exit()
+
+
+if __name__ == '__main__':
+    start()
