@@ -60,7 +60,7 @@ def toggle(deck_id: str, page: str, key: str):
 
 def save_file():
     print("Saving file.")
-    with open('../streamdeck4p.json', 'w') as f:
+    with open('streamdeck4p.json', 'w') as f:
         f.write(json.dumps(state, indent=2))
 
 
@@ -197,7 +197,7 @@ def exit_application_sigint(a, b):
             deck.close()
 
 
-def method_name():
+def main_loop():
     global key_board, decks
 
     key_board = Controller()
@@ -227,7 +227,7 @@ def method_name():
 def start():
     if not cli_switches():
         try:
-            method_name()
+            main_loop()
         except KeyboardInterrupt:
             print("Got keyboard interrupted. Closing now gracefully.")
             for deck in decks:

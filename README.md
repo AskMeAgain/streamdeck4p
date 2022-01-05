@@ -53,7 +53,7 @@ A button can have the following fields:
 | keys         | the text which will be written via key presses. Check out [Key presses](#Keypresses)               |
 | command      | the command which will be executed in a subshell                                                   |
 | image_mode   | if full, the text will not be placed at the bottom, but in the middle of the button                |
-| image_url    | url to the button image                                                                            |
+| image_url    | url to the button image. Can parse straight rgb colors (see [here](Image Url))                     |
 | toggle_index | internal array pointer of the toggle. This index will count up whenever the button is pressed      |
 | notification | if you set this to true, then a system inotify call will be made when you start and stop a command |
 | text_color   | Color of the text (white, blue, black etc)                                                         |                                                                                     |
@@ -155,3 +155,11 @@ and prefix the **unicode** font awesome icon with "fa->". Also the F
 needs to be in uppercase:
 
     "text": "fa->\uF2b9"
+
+## Image Url
+
+You can pass a normal url to an image for display, but you can also parse straight values if you prefix with bg->
+
+    "image_url": "bg->black" #this renders a black background
+    "image_url": "bg->#123,123,123" #this renders an rgb value as background color
+    
