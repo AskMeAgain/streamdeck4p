@@ -3,14 +3,15 @@
     "current_page": "0",
     "0": {
       "0": {
+        "ask_for_input": "Can you please enter any value?",
         "command": "echo $_text_state_0_$",
-        "notification": "True",
-        "keys": "sep->sandbox,delay,delay,delay,delay,delay,sep->abasdasdasdasdasdasdasdasdasdasdasas",
+        "notification": "False",
+        "keys": "sep->$_input_0_$",
         "image_mode": "full",
         "text": "fa->\uf2b9",
         "text_size": 30,
         "image_url": "bg->#228,150,150",
-        "toggle_index": 3,
+        "toggle_index": 2,
         "state": [
           "local",
           "int",
@@ -22,17 +23,18 @@
           "different2",
           "1231123",
           "123222222"
-        ]
+        ],
+        "input": "test 1 2 3 4"
       },
       "1": {
-        "toggle_index": 0,
+        "keys": "sep->$_input_0_$",
+        "toggle_index": 3,
         "state": [
           "db",
           "chrome",
           "intellij",
           "postman"
         ],
-        "keys": "<ctrl>+<f1>",
         "text": "$_state_1_$"
       },
       "2": {
@@ -46,5 +48,5 @@
       }
     }
   },
-  "pid": 1688
+  "pid": 10733
 }

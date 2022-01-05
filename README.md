@@ -30,12 +30,14 @@ See the streamdeck4p.json file for an example.
 1. clone this repo somewhere
 2. Install [poetry](https://python-poetry.org/)
 3. execute `poetry install`
-4. Plugin your streamdeck
-5. find your streamdeck SerialId by running `poetry run streamdeck4p --show-devices`
-6. Create/update the streamdeck4p.json file in this folder
+4. Add [pygobject](https://pygobject.readthedocs.io/en/latest/getting_started.html) (choose **Installing from PyPI with
+   pip**, but replace pip with poetry add)
+5. Plugin your streamdeck
+6. find your streamdeck SerialId by running `poetry run streamdeck4p --show-devices`
+7. Create/update the streamdeck4p.json file in this folder
     1. Additionally any file with a name pattern like _streamdeck4p-*.json_ is getting merged into the streamdeck4p.json
        file on startup
-7. Startup the main script via `poetry run streamdeck4p`
+8. Startup the main script via `poetry run streamdeck4p`
 
 ## json format
 
@@ -47,18 +49,19 @@ streamdeck minus 1.
 
 A button can have the following fields:
 
-| Field        | Description                                                                                        |
-|--------------|----------------------------------------------------------------------------------------------------|
-| text         | The text which is displayed on the streamdeck. FontAwesome compatible (see [here](#FontAwesome))   |
-| keys         | the text which will be written via key presses. Check out [Key presses](#Keypresses)               |
-| command      | the command which will be executed in a subshell                                                   |
-| image_mode   | if full, the text will not be placed at the bottom, but in the middle of the button                |
-| image_url    | url to the button image. Can parse straight rgb colors (see [here](Image Url))                     |
-| toggle_index | internal array pointer of the toggle. This index will count up whenever the button is pressed      |
-| notification | if you set this to true, then a system inotify call will be made when you start and stop a command |
-| text_color   | Color of the text (white, blue, black etc)                                                         |                                                                                     |
-| text_size    | Size of the text                                                                                   |                                                                                     |
-| ANY LIST     | Please check out [State](#State)                                                                   |
+| Field         | Description                                                                                                                                                             |
+|---------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| text          | The text which is displayed on the streamdeck. FontAwesome compatible (see [here](#FontAwesome))                                                                        |
+| keys          | the text which will be written via key presses. Check out [Key presses](#Keypresses)                                                                                    |
+| command       | the command which will be executed in a subshell                                                                                                                        |
+| image_mode    | if full, the text will not be placed at the bottom, but in the middle of the button                                                                                     |
+| image_url     | url to the button image. Can parse straight rgb colors (see [here](Image Url))                                                                                          |
+| toggle_index  | internal array pointer of the toggle. This index will count up whenever the button is pressed                                                                           |
+| notification  | if you set this to true, then a system inotify call will be made when you start and stop a command                                                                      |
+| text_color    | Color of the text (white, blue, black etc)                                                                                                                              |                                                                                     |
+| text_size     | Size of the text                                                                                                                                                        |                                                                                     |
+| ask_for_input | A popup will open, which asks the user for input. The result is stored in a state called "input" and can be reference like a normal state (aka $_input_0_$ for example) |                                                                                     |
+| ANY LIST      | Please check out [State](#State)                                                                                                                                        |
 
 Example streamdeck4p.json:
 
@@ -84,6 +87,7 @@ Example streamdeck4p.json:
               "1231123",
               "123222222"
             ],
+            "ask_for_input": "Please enter a value!",
             "image_url": "icons/$_state_0_$.png"
           }
         }
@@ -112,6 +116,13 @@ differently calculated, as it uses the "state" array to do its lookup (-> sandbo
 
 **if you have atleast one state array, then there needs to exist a state arrray called "state", or else the application
 will not work**
+
+### Input state
+
+If you add the "ask_for_input" flag, then a popup will ask the user for input. The result is stored in a state called **
+input** and can be referenced like normal.
+
+    $_input_0_$ #is the reference to the input state of button 0
 
 ## Keypresses
 
@@ -150,9 +161,8 @@ To shutdown the script, press CTRL + C, kill it via SIGINT or via the script its
 ## FontAwesome
 
 [FontAwesome](https://github.com/FortAwesome/Font-Awesome) is also integrated into this script. If you want to display
-font awesome icons instead of pictures just display a text only, 
-and prefix the **unicode** font awesome icon with "fa->". Also the F
-needs to be in uppercase:
+font awesome icons instead of pictures just display a text only, and prefix the **unicode** font awesome icon with "
+fa->". Also the F needs to be in uppercase:
 
     "text": "fa->\uF2b9"
 

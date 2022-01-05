@@ -9,6 +9,7 @@ from signal import signal, SIGUSR1, SIGTERM, SIGINT
 from time import sleep
 
 import pynput
+import zenipy as zenipy
 from pynput.keyboard import Controller
 
 from pathlib import Path
@@ -31,7 +32,11 @@ def replace_with_state(deck_id: str, page: str, line: str) -> str:
     state_arr = groups.group(1)
     new_key = groups.group(2)
     resolved_btn = state[deck_id][page][new_key]
-    resolved_state = resolved_btn[state_arr][resolved_btn["toggle_index"]]
+
+    if state_arr == "input":
+        resolved_state = resolved_btn[state_arr]
+    else:
+        resolved_state = resolved_btn[state_arr][resolved_btn["toggle_index"]]
 
     return line.replace(f"$_{state_arr}_{new_key}_$", resolved_state)
 
@@ -84,6 +89,9 @@ def press_keys(deck_id: str, page: str, keys: str):
 def button_activated(deck_id: str, page: str, key: str):
     try:
         command_worked = True
+        if "ask_for_input" in state[deck_id][page][key]:
+            input = zenipy.zenipy.entry(text=state[deck_id][page][key]["ask_for_input"], placeholder='', title='', width=330, height=120, timeout=None)
+            state[deck_id][page][key]["input"] = input
         if "command" in state[deck_id][page][key]:
             command_worked = execute_command(deck_id, page, state[deck_id][page][key])
         if "keys" in state[deck_id][page][key]:
@@ -163,9 +171,11 @@ def cli_switches() -> bool:
         load_state(False)
         deck_id = sys.argv[2]
         next_page = sys.argv[3]
-        state[deck_id]["current_page"] = str(next_page)
-        save_file()
-        subprocess.run(["kill", "-USR1", str(state["pid"])])
+
+        if str(next_page) in state[deck_id]:
+            state[deck_id]["current_page"] = str(next_page)
+            save_file()
+            subprocess.run(["kill", "-USR1", str(state["pid"])])
         return True
     elif "--show-devices" in sys.argv:
         streamdecks = DeviceManager().enumerate()
