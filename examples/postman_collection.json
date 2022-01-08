@@ -1,0 +1,95 @@
+{
+	"info": {
+		"_postman_id": "c886c1a7-7698-4ad0-bb20-5cefa07acb45",
+		"name": "EmptyCollection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "www.google.de",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "www.google.de",
+					"host": [
+						"www",
+						"google",
+						"de"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "www.google.de Copy",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "www.google.de",
+					"host": [
+						"www",
+						"google",
+						"de"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "www.google.de Copy 2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"console.log(\"RESULT: please show this???????\")"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "www.google.de",
+					"host": [
+						"www",
+						"google",
+						"de"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"pm.sendRequest('https://postman-echo.com/get', (error, response) => {",
+					"  if (error) {",
+					"    console.log(error);",
+					"  } else {",
+					"  console.log(response);",
+					"  }",
+					"});",
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

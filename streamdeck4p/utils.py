@@ -4,6 +4,8 @@ from typing import Dict
 from PIL import Image, ImageDraw, ImageFont
 from StreamDeck.ImageHelpers import PILHelper
 
+image_cache: Dict[str, memoryview] = {}
+
 
 def update_list(original, update):
     assert len(original) == len(update), "Can only handle equal length lists."
@@ -38,6 +40,12 @@ def update_dict(original, update):
 
 
 def generate_image(deck, icon_filename: str, text: str, image_mode: str, btn_state: Dict[str, str]) -> Image:
+    global image_cache
+    hash = f"{icon_filename}||{text}||{image_mode}"
+    if hash in image_cache:
+        print(f"Used cache for {hash}")
+        return image_cache[hash]
+
     if icon_filename:
         if icon_filename.startswith("bg->"):
             if icon_filename.startswith("bg->#"):
@@ -49,14 +57,13 @@ def generate_image(deck, icon_filename: str, text: str, image_mode: str, btn_sta
             icon = Image.open(icon_filename)
     else:
         icon = PILHelper.create_image(deck)
-    normal_margin = 5
+    n_margin = 5
     if image_mode == "full":
-        normal_margin = 0
-    bottom_margin = normal_margin
+        n_margin = 0
+    bottom_margin = n_margin
     if text and image_mode != "full":
         bottom_margin += 15
-    image = PILHelper.create_scaled_image(deck, icon,
-                                          margins=[normal_margin, normal_margin, bottom_margin, normal_margin])
+    image = PILHelper.create_scaled_image(deck, icon, margins=[n_margin, n_margin, bottom_margin, n_margin])
     text_height = image.height - 5
     if image_mode == "full":
         text_height = image.height / 2
@@ -84,8 +91,12 @@ def generate_image(deck, icon_filename: str, text: str, image_mode: str, btn_sta
 
     draw.text((image.width / 2, text_height), text=text, font=font, anchor="ms", fill=textcolor)
 
-    return PILHelper.to_native_format(deck, image)
+    result_image = PILHelper.to_native_format(deck, image)
+
+    image_cache[hash] = result_image
+
+    return result_image
 
 
-def message(title, message):
+def message(title: str, message: str):
     os.system('notify-send "' + title + '" "' + message + '"')

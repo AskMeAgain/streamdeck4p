@@ -10,8 +10,7 @@ streamdeck = "^0.9.0"
 Pillow = "^8.4.0"
 psutil = "^5.9.0"
 pynput = "^1.7.6"
-zenipy = "^0.1.5"
-PyGObject = "^3.42.0"
+yad = "^0.9.14"
 
 [tool.poetry.dev-dependencies]
 

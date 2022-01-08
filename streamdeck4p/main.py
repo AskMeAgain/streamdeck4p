@@ -9,7 +9,6 @@ from signal import signal, SIGUSR1, SIGTERM, SIGINT
 from time import sleep
 
 import pynput
-import zenipy as zenipy
 from pynput.keyboard import Controller
 
 from pathlib import Path
@@ -17,12 +16,14 @@ from typing import Dict
 
 from StreamDeck.DeviceManager import DeviceManager
 from StreamDeck.Devices import StreamDeck
+from yad import YAD
 
 from streamdeck4p import utils
 
 state: Dict[str, Dict[str, Dict[str, Dict[str, str]]]] = {}
 decks: StreamDeck = []
 key_board: Controller
+yad: YAD = YAD()
 
 
 def replace_with_state(deck_id: str, page: str, line: str) -> str:
@@ -49,18 +50,21 @@ def execute_command(deck_id: str, page: str, btn_state: Dict[str, str]) -> bool:
     if "notification" in btn_state and btn_state["notification"]:
         utils.message("StreamDeck4p", "Starting process")
 
-    subprocess.run(fixed_command.split(" "))
+    process = subprocess.run(fixed_command.split(" "))
 
     if "notification" in btn_state and btn_state["notification"]:
-        utils.message("StreamDeck4p", "Ending process")
+        if process.returncode == 0:
+            utils.message("StreamDeck4p", "Ending process")
+        else:
+            utils.message("StreamDeck4p", "Ending process", )
 
     return True
 
 
-def toggle(deck_id: str, page: str, key: str):
-    if "toggle_index" in state[deck_id][page][key]:
-        state[deck_id][page][key]["toggle_index"] += 1
-        state[deck_id][page][key]["toggle_index"] %= len(state[deck_id][page][key]["state"])
+def toggle(btn: Dict[str, str]):
+    if "toggle_index" in btn:
+        btn["toggle_index"] += 1
+        btn["toggle_index"] %= len(btn["state"])
 
 
 def save_file():
@@ -69,9 +73,14 @@ def save_file():
         f.write(json.dumps(state, indent=2))
 
 
-def press_keys(deck_id: str, page: str, keys: str):
-    print("Pressing keys.")
-    replaced_keys = replace_with_state(deck_id, page, keys)
+def press_keys(deck_id: str, page: str, btn_id: str):
+    text_speed = 0.01
+    btn = state[deck_id][page][btn_id]
+    if "input_speed" in btn:
+        text_speed = btn["input_speed"]
+
+    print(f"Pressing keys with speed {text_speed}.")
+    replaced_keys = replace_with_state(deck_id, page, btn["keys"])
     for frame_key in replaced_keys.split(","):
         if frame_key.startswith("sep->"):
             frame_key = ",".join(frame_key[5:])
@@ -81,7 +90,7 @@ def press_keys(deck_id: str, page: str, keys: str):
                 continue
             for key in pynput.keyboard.HotKey.parse(fixed_frame_key):
                 key_board.press(key)
-            sleep(0.01)
+            sleep(text_speed)
             for key in pynput.keyboard.HotKey.parse(fixed_frame_key):
                 key_board.release(key)
 
@@ -89,21 +98,36 @@ def press_keys(deck_id: str, page: str, keys: str):
 def button_activated(deck_id: str, page: str, key: str):
     try:
         command_worked = True
-        if "ask_for_input" in state[deck_id][page][key]:
-            input = zenipy.zenipy.entry(text=state[deck_id][page][key]["ask_for_input"], placeholder='', title='', width=330, height=120, timeout=None)
-            state[deck_id][page][key]["input"] = input
-        if "command" in state[deck_id][page][key]:
-            command_worked = execute_command(deck_id, page, state[deck_id][page][key])
-        if "keys" in state[deck_id][page][key]:
-            press_keys(deck_id, page, state[deck_id][page][key]["keys"])
+        deck = state[deck_id]
+        btn = deck[page][key]
+        toggle_mode = "simple" if "toggle_mode" not in btn else btn["toggle_mode"]
+        if toggle_mode == "button_selection":
+            yad_command = [] if "yad-additions" not in btn else btn["yad-additions"].copy()
+            for index in range(len(btn["state"])):
+                yad_command.append(f"--button={btn['state'][index]}:{index}")
+            btn["toggle_index"] = execute_yad(yad_command)
+        if "ask_for_input" in btn:
+            btn["input"] = yad.Entry(label=btn["ask_for_input"])
+        if "command" in btn:
+            command_worked = execute_command(deck_id, page, btn)
+        if "keys" in btn:
+            press_keys(deck_id, page, key)
+
         if command_worked:
-            toggle(deck_id, page, key)
-        if "next_page" in state[deck_id][page][key]:
-            state[deck_id]["current_page"] = state[deck_id][page][key]["next_page"]
+            if toggle_mode == "simple":
+                toggle(btn)
+
+        if "next_page" in btn:
+            deck["current_page"] = btn["next_page"]
         save_file()
         render_gui('', '')
     except Exception as e:
         print(f"Button pressed and got error while executing process: {e}")
+
+
+def execute_yad(yad_command) -> str:
+    result = yad.execute(yad_command)
+    return result[len(result) - 1]
 
 
 def key_change_callback(deck, key, button_pressed):
@@ -135,27 +159,23 @@ def render_gui(a, b):
     load_state(False)
     for deck in decks:
         for key in range(deck.key_count()):
+            key = str(key)
             deck_id = deck.get_serial_number()
             deck_state = state[deck_id]
-            page = deck_state["current_page"]
+            page_name = str(deck_state["current_page"])
 
-            if page in deck_state and str(key) in deck_state[page]:
-                replaced_img = None
-                if "image_url" in deck_state[page][str(key)]:
-                    img_url = deck_state[page][str(key)]["image_url"]
-                    replaced_img = replace_with_state(deck_id, page, img_url)
-                text = ""
-                mode = ""
-                if "image_mode" in deck_state[page][str(key)]:
-                    mode = deck_state[page][str(key)]["image_mode"]
-                if "text" in deck_state[page][str(key)]:
-                    text = replace_with_state(deck_id, page, deck_state[page][str(key)]["text"])
-                image = utils.generate_image(deck, replaced_img, text, mode, deck_state[page][str(key)])
+            if page_name in deck_state and key in deck_state[page_name]:
+                page = deck_state[page_name]
+                btn = page[key]
+                replaced_img = None if "image_url" not in btn else replace_with_state(deck_id, page_name, btn["image_url"])
+                mode = "" if "image_mode" not in btn else btn["image_mode"]
+                text = "" if "text" not in btn else replace_with_state(deck_id, page_name, btn["text"])
+                image = utils.generate_image(deck, replaced_img, text, mode, btn)
                 with deck:
-                    deck.set_key_image(key, image)
+                    deck.set_key_image(int(key), image)
             else:
                 with deck:
-                    deck.set_key_image(key, 0x00)
+                    deck.set_key_image(int(key), 0x00)
 
 
 def cli_switches() -> bool:
@@ -173,9 +193,11 @@ def cli_switches() -> bool:
         next_page = sys.argv[3]
 
         if str(next_page) in state[deck_id]:
-            state[deck_id]["current_page"] = str(next_page)
-            save_file()
-            subprocess.run(["kill", "-USR1", str(state["pid"])])
+            if str(next_page) != state[deck_id]["current_page"]:
+                print(f"Switching to page {next_page}")
+                state[deck_id]["current_page"] = str(next_page)
+                save_file()
+                subprocess.run(["kill", "-USR1", str(state["pid"])])
         return True
     elif "--show-devices" in sys.argv:
         streamdecks = DeviceManager().enumerate()

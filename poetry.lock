@@ -7,6 +7,17 @@ optional = false
 python-versions = "*"
 
 [[package]]
+name = "pexpect"
+version = "4.8.0"
+description = "Pexpect allows easy control of interactive console applications."
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+ptyprocess = ">=0.5"
+
+[[package]]
 name = "pillow"
 version = "8.4.0"
 description = "Python Imaging Library (Fork)"
@@ -26,23 +37,12 @@ python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 test = ["ipaddress", "mock", "unittest2", "enum34", "pywin32", "wmi"]
 
 [[package]]
-name = "pycairo"
-version = "1.20.1"
-description = "Python interface for cairo"
+name = "ptyprocess"
+version = "0.7.0"
+description = "Run a subprocess in a pseudo terminal"
 category = "main"
 optional = false
-python-versions = ">=3.6, <4"
-
-[[package]]
-name = "pygobject"
-version = "3.42.0"
-description = "Python bindings for GObject Introspection"
-category = "main"
-optional = false
-python-versions = ">=3.6, <4"
-
-[package.dependencies]
-pycairo = ">=1.16,<2.0"
+python-versions = "*"
 
 [[package]]
 name = "pynput"
@@ -131,21 +131,28 @@ optional = false
 python-versions = ">=3.8"
 
 [[package]]
-name = "zenipy"
-version = "0.1.5"
-description = "Simple dialog with Python and Gtk"
+name = "yad"
+version = "0.9.14"
+description = "A python interface for the Yad program"
 category = "main"
 optional = false
 python-versions = "*"
 
+[package.dependencies]
+pexpect = ">=3.3"
+
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "95b9d374e16cceb388a71a6a30c413a85d0aec716b3f657e54da7a54089bca52"
+content-hash = "927b4b257de35f2dd7871c350f1af410765cb9fc8d8f5d601735557d96ae5aed"
 
 [metadata.files]
 evdev = [
     {file = "evdev-1.4.0.tar.gz", hash = "sha256:8782740eb1a86b187334c07feb5127d3faa0b236e113206dfe3ae8f77fb1aaf1"},
+]
+pexpect = [
+    {file = "pexpect-4.8.0-py2.py3-none-any.whl", hash = "sha256:0b48a55dcb3c05f3329815901ea4fc1537514d6ba867a152b581d69ae3710937"},
+    {file = "pexpect-4.8.0.tar.gz", hash = "sha256:fc65a43959d153d0114afe13997d439c22823a27cefceb5ff35c2178c6784c0c"},
 ]
 pillow = [
     {file = "Pillow-8.4.0-cp310-cp310-macosx_10_10_universal2.whl", hash = "sha256:81f8d5c81e483a9442d72d182e1fb6dcb9723f289a57e8030811bac9ea3fef8d"},
@@ -219,21 +226,9 @@ psutil = [
     {file = "psutil-5.9.0-cp39-cp39-win_amd64.whl", hash = "sha256:7d190ee2eaef7831163f254dc58f6d2e2a22e27382b936aab51c835fc080c3d3"},
     {file = "psutil-5.9.0.tar.gz", hash = "sha256:869842dbd66bb80c3217158e629d6fceaecc3a3166d3d1faee515b05dd26ca25"},
 ]
-pycairo = [
-    {file = "pycairo-1.20.1-cp310-cp310-win32.whl", hash = "sha256:736ffc618e851601e861a630293e5c910ef016b83b2d035a336f83a367bf56ab"},
-    {file = "pycairo-1.20.1-cp310-cp310-win_amd64.whl", hash = "sha256:261c69850d4b2ec03346c9745bad2a835bb8124e4c6961b8ceac503d744eb3b3"},
-    {file = "pycairo-1.20.1-cp36-cp36m-win32.whl", hash = "sha256:6db823a18e7be1eb2a29c28961f2f01e84d3b449f06be7338d05ac8f90592cd5"},
-    {file = "pycairo-1.20.1-cp36-cp36m-win_amd64.whl", hash = "sha256:5525da2d8de912750dd157752aa96f1f0a42a437c5625e85b14c936b5c6305ae"},
-    {file = "pycairo-1.20.1-cp37-cp37m-win32.whl", hash = "sha256:c8c2bb933974d91c5d19e54b846d964de177e7bf33433bf34ac34c85f9b30e94"},
-    {file = "pycairo-1.20.1-cp37-cp37m-win_amd64.whl", hash = "sha256:9a32e4a3574a104aa876c35d5e71485dfd6986b18d045534c6ec510c44d5d6a7"},
-    {file = "pycairo-1.20.1-cp38-cp38-win32.whl", hash = "sha256:0d7a6754d410d911a46f00396bee4be96500ccd3d178e7e98aef1140e3dd67ae"},
-    {file = "pycairo-1.20.1-cp38-cp38-win_amd64.whl", hash = "sha256:b605151cdd23cedb31855b8666371b6e26b80f02753a52c8b8023a916b1df812"},
-    {file = "pycairo-1.20.1-cp39-cp39-win32.whl", hash = "sha256:e800486b51fffeb11ed867b4f2220d446e2a60a81a73b7c377123e0cbb72f49d"},
-    {file = "pycairo-1.20.1-cp39-cp39-win_amd64.whl", hash = "sha256:f123d3818e30b77b7209d70a6dcfd5b4e34885f9fa539d92dd7ff3e4e2037213"},
-    {file = "pycairo-1.20.1.tar.gz", hash = "sha256:1ee72b035b21a475e1ed648e26541b04e5d7e753d75ca79de8c583b25785531b"},
-]
-pygobject = [
-    {file = "PyGObject-3.42.0.tar.gz", hash = "sha256:b9803991ec0b0b4175e81fee0ad46090fa7af438fe169348a9b18ae53447afcd"},
+ptyprocess = [
+    {file = "ptyprocess-0.7.0-py2.py3-none-any.whl", hash = "sha256:4b41f3967fce3af57cc7e94b888626c18bf37a083e3651ca8feeb66d492fef35"},
+    {file = "ptyprocess-0.7.0.tar.gz", hash = "sha256:5c5d0a3b48ceee0b48485e0c26037c0acd7d29765ca3fbb5cb3831d347423220"},
 ]
 pynput = [
     {file = "pynput-1.7.6-py2.py3-none-any.whl", hash = "sha256:19861b2a0c430d646489852f89500e0c9332e295f2c020e7c2775e7046aa2e2f"},
@@ -284,6 +279,7 @@ streamdeck = [
     {file = "streamdeck-0.9.0-py3-none-any.whl", hash = "sha256:a2637645deeb9c8fb5ae7532011c2bd5671b909a653f9c54e8a1d744a77ef3db"},
     {file = "streamdeck-0.9.0.tar.gz", hash = "sha256:f7be77e111cebab6388394b5d2c54dd6a358625e30dbb0317e7197e4c80f65ae"},
 ]
-zenipy = [
-    {file = "zenipy-0.1.5.tar.gz", hash = "sha256:c773c2e5022764b6f7efaf87256b4c73ab81d2452832126bb2bed6f7b1962cce"},
+yad = [
+    {file = "yad-0.9.14-py2.py3-none-any.whl", hash = "sha256:815ddf29b7fc09999cb360e7702de5cd26f3366608e17c2841a35bfd68b2b3e3"},
+    {file = "yad-0.9.14.tar.gz", hash = "sha256:4153029456c238fabef337320b3cabaa0caafbae9b487e7a0035bc32390991d3"},
 ]
