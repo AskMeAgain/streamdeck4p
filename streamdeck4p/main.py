@@ -34,12 +34,24 @@ def replace_with_state(deck_id: str, page: str, line: str) -> str:
     new_key = groups.group(2)
     resolved_btn = state[deck_id][page][new_key]
 
+    first_replacement = replace_now(line, new_key, resolved_btn, state_arr, "$")
+
+    groups = re.search("!_(.*)_(.*)_!", line)
+    if not groups:
+        return first_replacement
+    state_arr = groups.group(1)
+    new_key = groups.group(2)
+    resolved_btn = state[deck_id][page][new_key]
+
+    return replace_now(first_replacement, new_key, resolved_btn, state_arr, "!")
+
+
+def replace_now(line, new_key, resolved_btn, state_arr, sym: str):
     if state_arr == "input":
         resolved_state = resolved_btn[state_arr]
     else:
         resolved_state = resolved_btn[state_arr][resolved_btn["toggle_index"]]
-
-    return line.replace(f"$_{state_arr}_{new_key}_$", resolved_state)
+    return line.replace(f"{sym}_{state_arr}_{new_key}_{sym}", resolved_state)
 
 
 def execute_command(deck_id: str, page: str, btn_state: Dict[str, str]) -> bool:
@@ -102,7 +114,7 @@ def button_activated(deck_id: str, page: str, key: str):
         btn = deck[page][key]
         toggle_mode = "simple" if "toggle_mode" not in btn else btn["toggle_mode"]
         if toggle_mode == "button_selection":
-            yad_command = [] if "yad-additions" not in btn else btn["yad-additions"].copy()
+            yad_command = [] if "yad_additions" not in btn else btn["yad_additions"].copy()
             for index in range(len(btn["state"])):
                 yad_command.append(f"--button={btn['state'][index]}:{index}")
             btn["toggle_index"] = execute_yad(yad_command)
@@ -118,7 +130,8 @@ def button_activated(deck_id: str, page: str, key: str):
                 toggle(btn)
 
         if "next_page" in btn:
-            deck["current_page"] = btn["next_page"]
+            if btn["next_page"] in deck[page]:
+                deck["current_page"] = btn["next_page"]
         save_file()
         render_gui('', '')
     except Exception as e:

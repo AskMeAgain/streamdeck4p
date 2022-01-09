@@ -43,7 +43,6 @@ def generate_image(deck, icon_filename: str, text: str, image_mode: str, btn_sta
     global image_cache
     hash = f"{icon_filename}||{text}||{image_mode}"
     if hash in image_cache:
-        print(f"Used cache for {hash}")
         return image_cache[hash]
 
     if icon_filename:

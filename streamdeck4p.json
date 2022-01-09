@@ -1,6 +1,6 @@
 {
   "DL38K1A00645": {
-    "current_page": "0",
+    "current_page": "idea",
     "0": {
       "0": {
         "image_mode": "full",
@@ -44,13 +44,13 @@
         "text": "$_state_1_$"
       },
       "2": {
-        "next_page": "Postman"
+        "next_page": "idea"
       },
       "3": {
         "image_mode": "full",
         "toggle_mode": "simple",
         "image_url": "bg->gray",
-        "yad-additions": [
+        "yad_additions": [
           "--height=400",
           "--width=400"
         ],
@@ -65,12 +65,75 @@
         "text": "$_state_3_$"
       }
     },
-    "Postman": {
+    "idea": {
+      "0": {
+        "next_page": "Home",
+        "image_url": "bg->grey",
+        "text": "fa->\uf359",
+        "image_mode": "full",
+        "text_size": 40
+      },
+      "1": {
+        "image_url": "bg->grey",
+        "image_mode": "full",
+        "text": "App1"
+      },
       "2": {
-        "next_page": "0",
-        "text": "abc"
+        "image_url": "bg->grey",
+        "image_mode": "full",
+        "text": "App2"
+      },
+      "3": {
+        "image_url": "bg->grey",
+        "image_mode": "full",
+        "state": [
+          "App3",
+          "App4",
+          "App5"
+        ],
+        "toggle_mode": "button_selection",
+        "toggle_index": 1,
+        "text": "other",
+        "command": "echo '$_state_4_$ -> !_state_3_!'"
+      },
+      "4": {
+        "text": "$_state_4_$",
+        "state": [
+          "run",
+          "debug"
+        ],
+        "image_mode": "full",
+        "toggle_index": 0
+      },
+      "5": {
+        "image_mode": "full",
+        "text": "utils",
+        "state": [
+          "Test1",
+          "test2"
+        ],
+        "command_state": [
+          "echo 'Test1'",
+          "echo 'Test2'"
+        ],
+        "toggle_mode": "button_selection",
+        "command": "$_command_state_5_$",
+        "toggle_index": 1
+      },
+      "9": {
+        "text": "$_state_9_$",
+        "toggle_mode": "button_selection",
+        "toggle_index": 0,
+        "yad_additions": [
+          "--entry"
+        ],
+        "state": [
+          "local",
+          "int",
+          "sandbox"
+        ]
       }
     }
   },
-  "pid": 1589
+  "pid": 2324
 }
