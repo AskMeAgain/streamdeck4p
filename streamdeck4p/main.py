@@ -113,13 +113,16 @@ def button_activated(deck_id: str, page: str, key: str):
         deck = state[deck_id]
         btn = deck[page][key]
         toggle_mode = "simple" if "toggle_mode" not in btn else btn["toggle_mode"]
+        yad_command = [] if "yad_additions" not in btn else btn["yad_additions"].copy()
         if toggle_mode == "button_selection":
-            yad_command = [] if "yad_additions" not in btn else btn["yad_additions"].copy()
             for index in range(len(btn["state"])):
                 yad_command.append(f"--button={btn['state'][index]}:{index}")
-            btn["toggle_index"] = execute_yad(yad_command)
+            btn["toggle_index"] = execute_yad(yad_command, 0)
         if "ask_for_input" in btn:
-            btn["input"] = yad.Entry(label=btn["ask_for_input"])
+            yad_command.append("--entry")
+            yad_command.append(f"--text={btn['ask_for_input']}")
+            btn["input"] = execute_yad(yad_command, 1)
+            a = btn["input"]
         if "command" in btn:
             command_worked = execute_command(deck_id, page, btn)
         if "keys" in btn:
@@ -138,9 +141,9 @@ def button_activated(deck_id: str, page: str, key: str):
         print(f"Button pressed and got error while executing process: {e}")
 
 
-def execute_yad(yad_command) -> str:
+def execute_yad(yad_command, offset: int) -> str:
     result = yad.execute(yad_command)
-    return result[len(result) - 1]
+    return result[len(result) - 1 - offset]
 
 
 def key_change_callback(deck, key, button_pressed):

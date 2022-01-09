@@ -121,19 +121,17 @@
         "toggle_index": 1
       },
       "9": {
-        "text": "$_state_9_$",
-        "toggle_mode": "button_selection",
-        "toggle_index": 0,
+        "text": "$_input_9_$",
+        "ask_for_input": "True",
+        "toggle_index": 2,
         "yad_additions": [
-          "--entry"
+          "--button=int:int",
+          "--button=sandbox:sandbox",
+          "--button=local:local"
         ],
-        "state": [
-          "local",
-          "int",
-          "sandbox"
-        ]
+        "input": "asdasdasdasd"
       }
     }
   },
-  "pid": 2324
+  "pid": 2479
 }
