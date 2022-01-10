@@ -43,7 +43,15 @@
       "9": {
         "image_mode": "full",
         "text": "$_input_9_$",
-        "ask_for_input": "sh->./scripts/select-envi.sh"
+        "ask_for_input": "sh->./scripts/select-envi.sh",
+        "toggle_mode": "script",
+        "image_url": "$_state_9_$",
+        "state":[
+          "bg->green",
+          "bg->blue",
+          "bg->orange",
+          "bg->grey"
+        ]
       },
       "10": {
         "image_mode": "full",

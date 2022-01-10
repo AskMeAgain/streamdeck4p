@@ -123,12 +123,21 @@
       "9": {
         "text": "$_input_9_$",
         "ask_for_input": "sh->./scripts/select-envi.sh",
-        "input": "int",
-        "image_mode": "full"
+        "toggle_mode": "script",
+        "input": "ASD",
+        "image_mode": "full",
+        "toggle_index": 3,
+        "image_url": "$_state_9_$",
+        "state": [
+          "bg->green",
+          "bg->blue",
+          "bg->orange",
+          "bg->grey"
+        ]
       }
     }
   },
-  "pid": 3199,
+  "pid": 4240,
   "idea": {
     "0": {
       "next_page": "Home",

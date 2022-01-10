@@ -125,8 +125,10 @@ def button_activated(deck_id: str, page: str, key: str):
             if ask_for_input.startswith("sh->"):
                 ask_command = ask_for_input[4:].split(" ")
                 with subprocess.Popen(ask_command, stdout=subprocess.PIPE, bufsize=1, universal_newlines=True) as p:
-                    readlines = p.stdout.readlines()
-                    btn["input"] = readlines[0].strip("\n")
+                    readlines = p.communicate()[0]
+                    btn["input"] = readlines.strip("\n")
+                    if toggle_mode == "script":
+                        btn["toggle_index"] = int(p.returncode)
             else:
                 yad_command.append("--entry")
                 yad_command.append(f"--text={ask_for_input}")
