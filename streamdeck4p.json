@@ -118,13 +118,13 @@
           "debug"
         ],
         "image_mode": "full",
-        "toggle_index": 0
+        "toggle_index": 1
       },
       "9": {
         "text": "$_input_9_$",
         "ask_for_input": "sh->./scripts/select-envi.sh",
         "toggle_mode": "script",
-        "input": "ASD",
+        "input": "BANK",
         "image_mode": "full",
         "toggle_index": 3,
         "image_url": "$_state_9_$",
@@ -137,7 +137,7 @@
       }
     }
   },
-  "pid": 4240,
+  "pid": 4456,
   "idea": {
     "0": {
       "next_page": "Home",
