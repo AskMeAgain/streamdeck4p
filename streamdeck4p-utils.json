@@ -1,0 +1,21 @@
+{
+  "DL38K1A00645": {
+    "idea": {
+      "10": {
+        "image_mode": "full",
+        "text": "utils",
+        "state": [
+          "Show_File",
+          "Base64"
+        ],
+        "command_state": [
+          "./scripts/show-file-content.sh ./scripts/postman_collection.json",
+          "./scripts/base64-converter.sh"
+        ],
+        "toggle_mode": "button_selection",
+        "command": "$_command_state_10_$",
+        "toggle_index": 1
+      }
+    }
+  }
+}

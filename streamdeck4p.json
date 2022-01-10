@@ -66,6 +66,21 @@
       }
     },
     "idea": {
+      "10": {
+        "image_mode": "full",
+        "text": "utils",
+        "state": [
+          "Show_File",
+          "Base64"
+        ],
+        "command_state": [
+          "./scripts/show-file-content.sh ./scripts/postman_collection.json",
+          "./scripts/base64-converter.sh"
+        ],
+        "toggle_mode": "button_selection",
+        "command": "$_command_state_10_$",
+        "toggle_index": 1
+      },
       "0": {
         "next_page": "Home",
         "image_url": "bg->grey",
@@ -105,33 +120,74 @@
         "image_mode": "full",
         "toggle_index": 0
       },
-      "5": {
-        "image_mode": "full",
-        "text": "utils",
-        "state": [
-          "Test1",
-          "test2"
-        ],
-        "command_state": [
-          "echo 'Test1'",
-          "echo 'Test2'"
-        ],
-        "toggle_mode": "button_selection",
-        "command": "$_command_state_5_$",
-        "toggle_index": 1
-      },
       "9": {
         "text": "$_input_9_$",
-        "ask_for_input": "True",
-        "toggle_index": 2,
-        "yad_additions": [
-          "--button=int:int",
-          "--button=sandbox:sandbox",
-          "--button=local:local"
-        ],
-        "input": "asdasdasdasd"
+        "ask_for_input": "sh->./scripts/select-envi.sh",
+        "input": "int",
+        "image_mode": "full"
       }
     }
   },
-  "pid": 2479
+  "pid": 3199,
+  "idea": {
+    "0": {
+      "next_page": "Home",
+      "image_url": "bg->grey",
+      "text": "fa->\uf359",
+      "image_mode": "full",
+      "text_size": 40
+    },
+    "1": {
+      "image_url": "bg->grey",
+      "image_mode": "full",
+      "text": "App1"
+    },
+    "2": {
+      "image_url": "bg->grey",
+      "image_mode": "full",
+      "text": "App2"
+    },
+    "3": {
+      "image_url": "bg->grey",
+      "image_mode": "full",
+      "state": [
+        "App3",
+        "App4",
+        "App5"
+      ],
+      "toggle_mode": "button_selection",
+      "toggle_index": 1,
+      "text": "other",
+      "command": "echo '$_state_4_$ -> !_state_3_!'"
+    },
+    "4": {
+      "text": "$_state_4_$",
+      "state": [
+        "run",
+        "debug"
+      ],
+      "image_mode": "full",
+      "toggle_index": 0
+    },
+    "9": {
+      "text": "$_input_9_$",
+      "ask_for_input": "sh->./scripts/select-envi.sh",
+      "input": "lol"
+    },
+    "10": {
+      "image_mode": "full",
+      "text": "utils",
+      "state": [
+        "Show_File",
+        "Base64"
+      ],
+      "command_state": [
+        "./scripts/show-file-content.sh ./scripts/postman_collection.json",
+        "./scripts/base64-converter.sh"
+      ],
+      "toggle_mode": "button_selection",
+      "command": "$_command_state_10_$",
+      "toggle_index": 1
+    }
+  }
 }

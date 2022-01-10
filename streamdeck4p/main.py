@@ -119,10 +119,18 @@ def button_activated(deck_id: str, page: str, key: str):
                 yad_command.append(f"--button={btn['state'][index]}:{index}")
             btn["toggle_index"] = execute_yad(yad_command, 0)
         if "ask_for_input" in btn:
-            yad_command.append("--entry")
-            yad_command.append(f"--text={btn['ask_for_input']}")
-            btn["input"] = execute_yad(yad_command, 1)
-            a = btn["input"]
+
+            ask_for_input = btn['ask_for_input']
+
+            if ask_for_input.startswith("sh->"):
+                ask_command = ask_for_input[4:].split(" ")
+                with subprocess.Popen(ask_command, stdout=subprocess.PIPE, bufsize=1, universal_newlines=True) as p:
+                    readlines = p.stdout.readlines()
+                    btn["input"] = readlines[0].strip("\n")
+            else:
+                yad_command.append("--entry")
+                yad_command.append(f"--text={ask_for_input}")
+                btn["input"] = execute_yad(yad_command, 1)
         if "command" in btn:
             command_worked = execute_command(deck_id, page, btn)
         if "keys" in btn:
