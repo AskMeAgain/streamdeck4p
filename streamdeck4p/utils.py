@@ -7,21 +7,6 @@ from StreamDeck.ImageHelpers import PILHelper
 image_cache: Dict[str, memoryview] = {}
 
 
-def update_list(original, update):
-    assert len(original) == len(update), "Can only handle equal length lists."
-
-    for idx, (val_original, val_update) in enumerate(zip(original, update)):
-        if not isinstance(val_original, type(val_update)):
-            raise ValueError(f"Different types! {type(val_original)}, {type(val_update)}")
-        if isinstance(val_original, dict):
-            original[idx] = update_dict(original[idx], update[idx])
-        if isinstance(val_original, (tuple, list)):
-            original[idx] = update_list(original[idx], update[idx])
-        if isinstance(val_original, (str, int, float)):
-            original[idx] = val_update
-    return original
-
-
 def update_dict(original, update):
     for key, value in update.items():
 
@@ -33,7 +18,7 @@ def update_dict(original, update):
             if isinstance(value, dict):
                 update_dict(original[key], update[key])
             if isinstance(value, list):
-                update_list(original[key], update[key])
+                original[key] = update[key]
             if isinstance(value, (str, int, float)):
                 original[key] = update[key]
     return original

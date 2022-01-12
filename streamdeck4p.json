@@ -118,7 +118,7 @@
           "debug"
         ],
         "image_mode": "full",
-        "toggle_index": 1
+        "toggle_index": 0
       },
       "9": {
         "text": "$_input_9_$",
@@ -137,7 +137,7 @@
       }
     }
   },
-  "pid": 4456,
+  "pid": 1815,
   "idea": {
     "0": {
       "next_page": "Home",

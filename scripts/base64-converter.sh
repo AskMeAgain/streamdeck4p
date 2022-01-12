@@ -2,12 +2,20 @@
 
 text=$(yad --entry)
 
-yad --button='to Base64':0 --button='from Base64':1 --button="Exit"
+if [[ $? -eq "1" ]]; then
+    echo "Exit because of cancel pressed"
+exit
+fi
+
+result=$(yad --button='to Base64':1 --button='from Base64':2 --button='Exit':0)
 mode=$?
 
-echo $text
-
 if [[ mode -eq "0" ]]; then
+  echo "Exit because of exit pressed"
+  exit
+fi
+
+if [[ mode -eq "1" ]]; then
   result=$(echo $text | base64)
 else
   result=$(echo $text | base64 -d)
