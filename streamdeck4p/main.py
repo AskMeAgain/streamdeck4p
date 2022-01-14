@@ -48,9 +48,10 @@ def replace_with_state(deck_id: str, page: str, line: str) -> str:
 
 def replace_now(line, new_key, resolved_btn, state_arr, sym: str):
     if state_arr == "input":
-        resolved_state = resolved_btn[state_arr]
+        resolved_state = resolved_btn[state_arr] if "input" in resolved_btn else ""
     else:
-        resolved_state = resolved_btn[state_arr][resolved_btn["toggle_index"]]
+        index = 0 if "toggle_index" not in resolved_btn else resolved_btn["toggle_index"]
+        resolved_state = resolved_btn[state_arr][index]
     return line.replace(f"{sym}_{state_arr}_{new_key}_{sym}", resolved_state)
 
 
@@ -80,8 +81,9 @@ def toggle(btn: Dict[str, str]):
 
 
 def save_file():
-    print("Saving file.")
-    with open('streamdeck4p.json', 'w') as f:
+    path = Path.joinpath(Path.home(), "streamdeck4p/streamdeck4p.json");
+    print(f"Saving file under {path}")
+    with open(path, 'w') as f:
         f.write(json.dumps(state, indent=2))
 
 
@@ -143,7 +145,7 @@ def button_activated(deck_id: str, page: str, key: str):
                 toggle(btn)
 
         if "next_page" in btn:
-            if btn["next_page"] in deck[page]:
+            if btn["next_page"] in deck:
                 deck["current_page"] = btn["next_page"]
         save_file()
         render_gui('', '')
@@ -168,10 +170,11 @@ def key_change_callback(deck, key, button_pressed):
 
 def load_state(insert_pid: bool):
     global state
-    txt = Path('streamdeck4p.json').read_text()
+    txt = Path.joinpath(Path.home(), 'streamdeck4p/streamdeck4p.json').read_text()
     state = json.loads(txt)
 
-    json_files = glob.glob('streamdeck4p-*.json')
+    absolute = str(Path.joinpath(Path.home(), 'streamdeck4p/streamdeck4p-*.json'))
+    json_files = glob.glob(absolute)
     for path in json_files:
         txt2 = Path(path).read_text()
         state = utils.update_dict(state, json.loads(txt2))
@@ -193,7 +196,8 @@ def render_gui(a, b):
             if page_name in deck_state and key in deck_state[page_name]:
                 page = deck_state[page_name]
                 btn = page[key]
-                replaced_img = None if "image_url" not in btn else replace_with_state(deck_id, page_name, btn["image_url"])
+                replaced_img = None if "image_url" not in btn else replace_with_state(deck_id, page_name,
+                                                                                      btn["image_url"])
                 mode = "" if "image_mode" not in btn else btn["image_mode"]
                 text = "" if "text" not in btn else replace_with_state(deck_id, page_name, btn["text"])
                 image = utils.generate_image(deck, replaced_img, text, mode, btn)

@@ -48,10 +48,7 @@ def generate_image(deck, icon_filename: str, text: str, image_mode: str, btn_sta
     if text and image_mode != "full":
         bottom_margin += 15
     image = PILHelper.create_scaled_image(deck, icon, margins=[n_margin, n_margin, bottom_margin, n_margin])
-    text_height = image.height - 5
-    if image_mode == "full":
-        text_height = image.height / 2
-
+    text_height = image.height - 5 if image_mode != "full" else image.height / 2
     draw = ImageDraw.Draw(image)
 
     text_font_size = 15
@@ -69,11 +66,11 @@ def generate_image(deck, icon_filename: str, text: str, image_mode: str, btn_sta
         font = ImageFont.truetype("./fonts/Roboto-Regular.ttf", text_font_size)
         text_height += text_font_size / 3
 
-    textcolor = "white"
-    if "text_color" in btn_state:
-        textcolor = btn_state["text_color"]
+    textcolor = "white" if "text_color" not in btn_state else btn_state["text_color"]
+    top_margin_offset = 0 if "top_margin" not in btn_state else btn_state["top_margin"]
 
-    draw.text((image.width / 2, text_height), text=text, font=font, anchor="ms", fill=textcolor)
+    text_height = 0.5 * text_font_size + (100 - 2 * text_font_size) * 0.5
+    draw.text((image.width / 2, text_height + top_margin_offset), text=text, font=font, anchor="ms", fill=textcolor)
 
     result_image = PILHelper.to_native_format(deck, image)
 
