@@ -1,6 +1,9 @@
+import io
 import os
+
 from typing import Dict
 
+import requests
 from PIL import Image, ImageDraw, ImageFont
 from StreamDeck.ImageHelpers import PILHelper
 
@@ -37,6 +40,9 @@ def generate_image(deck, icon_filename: str, text: str, image_mode: str, btn_sta
             else:
                 color = icon_filename[4:]
             icon = Image.new('RGB', (100, 100), color)
+        elif icon_filename.startswith("url->"):
+            file = requests.get(icon_filename[5:])
+            icon = Image.open(io.BytesIO(file.content))
         else:
             icon = Image.open(icon_filename)
     else:

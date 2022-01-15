@@ -64,6 +64,7 @@ A button can have the following fields:
 | yad-additions | Whenever an option uses yad, these parameters will be additionally supplied (--height=400 or stuff like that)                                                                                                                                                                                                     |
 | toggle_mode   | default is "simple", which makes the button just a simple toggle. If you chose "button_selection", then yad will open and present you all the possible toggle options to chose from. It uses the state array for displaying. If toggle mode "script" then the return value of the script in ask_for_input is used |
 | ANY LIST      | Please check out [State](#State)                                                                                                                                                                                                                                                                                  |
+| top_margin    | Margin for the picture. Positive value moves up, negative moves the text downwards                                                                                                                                                                                                                                |
 
 Example streamdeck4p.json:
 
@@ -170,8 +171,9 @@ fa->". Also the F needs to be in uppercase:
 
 ## Image Url
 
-You can pass a normal url to an image for display, but you can also parse straight values if you prefix with bg->
+You can pass a normal url to an image for display via url->, but you can also parse straight values if you prefix with bg->
 
+    "image_url": "url->http//.google.de/iconwhatever.png" #this downloads the image
     "image_url": "bg->black" #this renders a black background
     "image_url": "bg->#123,123,123" #this renders an rgb value as background color
     
