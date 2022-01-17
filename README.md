@@ -65,6 +65,7 @@ A button can have the following fields:
 | toggle_mode   | default is "simple", which makes the button just a simple toggle. If you chose "button_selection", then yad will open and present you all the possible toggle options to chose from. It uses the state array for displaying. If toggle mode "script" then the return value of the script in ask_for_input is used |
 | ANY LIST      | Please check out [State](#State)                                                                                                                                                                                                                                                                                  |
 | top_margin    | Margin for the picture. Positive value moves up, negative moves the text downwards                                                                                                                                                                                                                                |
+| line_break_on | this sign will be replaced with \n in a displayed text                                                                                                                                                                                                                                                            |
 
 Example streamdeck4p.json:
 

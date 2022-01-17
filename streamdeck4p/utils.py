@@ -71,6 +71,8 @@ def generate_image(deck, icon_filename: str, text: str, image_mode: str, btn_sta
     else:
         font = ImageFont.truetype("./fonts/Roboto-Regular.ttf", text_font_size)
         text_height += text_font_size / 3
+    if "line-break-on" in btn_state:
+        text = text.replace("-", "\n")
 
     textcolor = "white" if "text_color" not in btn_state else btn_state["text_color"]
     top_margin_offset = 0 if "top_margin" not in btn_state else btn_state["top_margin"]

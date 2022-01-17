@@ -12,7 +12,8 @@
       "1": {
         "image_url": "bg->grey",
         "image_mode": "full",
-        "text": "App1"
+        "text": "App1-App2",
+        "line-break-on": "-"
       },
       "2": {
         "image_url": "bg->grey",
