@@ -209,6 +209,12 @@ def render_gui(a, b):
 
 
 def cli_switches() -> bool:
+    if "--press-button" in sys.argv:
+        load_state(False)
+        deck_id = sys.argv[2]
+        page = sys.argv[3]
+        btn_id = sys.argv[4]
+        button_activated(deck_id, page, btn_id)
     if "--reload-config" in sys.argv:
         load_state(False)
         subprocess.run(["kill", "-USR1", str(state["pid"])])
