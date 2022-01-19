@@ -162,6 +162,10 @@ To shutdown the script, press CTRL + C, kill it via SIGINT or via the script its
 
     python3 streamdeck4p.py --exit
 
+To press a button via cli:
+
+    python3 streamdeck4p.py --press-button DECK_ID PAGE_NAME BTN_ID
+
 ## FontAwesome
 
 [FontAwesome](https://github.com/FortAwesome/Font-Awesome) is also integrated into this script. If you want to display
