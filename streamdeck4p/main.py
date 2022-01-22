@@ -111,17 +111,19 @@ def press_keys(deck_id: str, page: str, btn_id: str):
 
 def button_activated(deck_id: str, page: str, key: str):
     try:
+        print(f"button {key} on page {page} with deck_id {deck_id} activated")
         command_worked = True
         deck = state[deck_id]
         btn = deck[page][key]
         toggle_mode = "simple" if "toggle_mode" not in btn else btn["toggle_mode"]
         yad_command = [] if "yad_additions" not in btn else btn["yad_additions"].copy()
         if toggle_mode == "button_selection":
+            print("We have activated button_selection")
             for index in range(len(btn["state"])):
                 yad_command.append(f"--button={btn['state'][index]}:{index}")
             btn["toggle_index"] = execute_yad(yad_command, 0)
         if "ask_for_input" in btn:
-
+            print("We ask for input")
             ask_for_input = btn['ask_for_input']
 
             if ask_for_input.startswith("sh->"):
@@ -136,15 +138,19 @@ def button_activated(deck_id: str, page: str, key: str):
                 yad_command.append(f"--text={ask_for_input}")
                 btn["input"] = execute_yad(yad_command, 1)
         if "command" in btn:
+            print("We are running a command")
             command_worked = execute_command(deck_id, page, btn)
         if "keys" in btn:
+            print("We are pressing some keys")
             press_keys(deck_id, page, key)
 
         if command_worked:
             if toggle_mode == "simple":
+                print("We add toggling")
                 toggle(btn)
 
         if "next_page" in btn:
+            print("Switching page")
             if btn["next_page"] in deck:
                 deck["current_page"] = btn["next_page"]
         save_file()
