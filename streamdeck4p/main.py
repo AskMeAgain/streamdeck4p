@@ -202,6 +202,9 @@ def render_gui(a, b):
             if page_name in deck_state and key in deck_state[page_name]:
                 page = deck_state[page_name]
                 btn = page[key]
+                if "default" in page:
+                    btn = utils.update_dict(btn, page["default"])
+
                 replaced_img = None if "image_url" not in btn else replace_with_state(deck_id, page_name,
                                                                                       btn["image_url"])
                 mode = "" if "image_mode" not in btn else btn["image_mode"]

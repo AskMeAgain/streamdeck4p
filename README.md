@@ -66,6 +66,7 @@ A button can have the following fields:
 | ANY LIST      | Please check out [State](#State)                                                                                                                                                                                                                                                                                  |
 | top_margin    | Margin for the picture. Positive value moves up, negative moves the text downwards                                                                                                                                                                                                                                |
 | line_break_on | this sign will be replaced with \n in a displayed text                                                                                                                                                                                                                                                            |
+| defaultbutton | A button with the name "default" will be the default template which other buttons (aka button 0-14) inherite                                                                                                                                                                                                      |
 
 Example streamdeck4p.json:
 
